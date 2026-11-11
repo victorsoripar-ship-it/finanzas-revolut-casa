@@ -83,9 +83,34 @@
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
     <!-- ===================================================================== -->
+    <!-- BANNER SUPERIOR DE CONEXIÓN ACTIVA (HARDCODED FIREBASE & GMAILS)      -->
+    <!-- ===================================================================== -->
+    <div class="bg-emerald-950/90 border-b border-emerald-500/40 px-4 py-2 text-xs">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center flex-wrap gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-500 text-slate-950 shadow-sm shadow-emerald-500/50">
+                    <span class="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+                    PROYECTO CONECTADO: finanzas-revolut-casa
+                </span>
+                <span class="text-emerald-200 font-medium">
+                    Cuentas Autorizadas Activas:
+                    <strong class="text-cyan-300 font-mono">victorsoripar@gmail.com</strong> (Víctor) &amp;
+                    <strong class="text-pink-300 font-mono">genesisabad99@gmail.com</strong> (Génesis)
+                </span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-[11px] font-mono text-emerald-300/90 hidden md:inline">AppID: 1:520559749159:web:7a02c3996f2703b020c602</span>
+                <button onclick="openApiModal()" class="text-[11px] font-bold text-emerald-300 hover:text-white underline flex items-center gap-1">
+                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Ver Credenciales Cargadas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
     <!-- EXCLUSIVE 2-ACCOUNT GMAIL LOGIN GATEWAY (VÍCTOR Y GÉNESIS)            -->
     <!-- ===================================================================== -->
-    <div id="authGateOverlay" class="fixed inset-0 bg-[#07090E]/95 backdrop-blur-xl z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div id="authGateOverlay" class="fixed inset-0 bg-[#07090E]/95 backdrop-blur-xl z-50 hidden items-center justify-center p-4 overflow-y-auto">
         <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-slate-700/80 shadow-2xl relative overflow-hidden my-auto">
             <div class="absolute -top-24 -right-24 w-56 h-56 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -left-24 w-56 h-56 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -97,89 +122,68 @@
                             <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
                         </div>
                         <div>
-                            <span class="text-[11px] font-bold uppercase tracking-widest text-cyan-400">Acceso Exclusivo Google Auth</span>
-                            <h2 class="text-xl font-extrabold text-white">Finanzas de Víctor & Génesis</h2>
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-cyan-400">Proyecto: finanzas-revolut-casa</span>
+                            <h2 class="text-xl font-extrabold text-white">Acceso de Víctor &amp; Génesis</h2>
                         </div>
                     </div>
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Real-Time
-                    </span>
+                    <button type="button" onclick="closeAuthGateDirect()" class="text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800/80">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
                 </div>
 
-                <p class="text-xs sm:text-sm text-slate-300 mb-5 leading-relaxed">
-                    Esta aplicación está blindada exclusivamente para vuestras <strong>2 cuentas de Gmail autorizadas</strong>. Cualquier otro correo será rechazado automáticamente:
+                <p class="text-xs sm:text-sm text-slate-300 mb-4 leading-relaxed">
+                    Haz <strong>1 clic en tu tarjeta</strong> para entrar directamente o inicia sesión oficial con Google (`victorsoripar@gmail.com` / `genesisabad99@gmail.com`):
                 </p>
 
-                <!-- Official Google Sign-In Button (For Production / GitHub Pages with Firebase Auth) -->
-                <button type="button" onclick="handleGooglePopupLogin()" class="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm shadow-xl transition flex items-center justify-center gap-3 mb-5">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
-                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
-                        <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
-                        <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 21.4 7.4 24 12 24z"/>
-                    </svg>
-                    <span>Continuar con Google (Gmail Autorizado)</span>
-                </button>
-
-                <div class="relative flex py-2 items-center mb-4">
-                    <div class="flex-grow border-t border-slate-800"></div>
-                    <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Selecciona tu cuenta Gmail autorizada</span>
-                    <div class="flex-grow border-t border-slate-800"></div>
-                </div>
-
-                <!-- Two Exclusive Whitelisted Gmail Account Cards -->
+                <!-- 1-Click Instant Entry Cards for Víctor and Génesis -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-5">
-                    <button type="button" onclick="selectLoginProfile('partner1')" id="loginCard-partner1" class="text-left p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/15 transition relative group">
+                    <button type="button" onclick="instantAccessPartner('partner1')" id="loginCard-partner1" class="text-left p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/15 hover:bg-blue-500/25 transition relative group">
                         <div class="flex items-center justify-between mb-2">
                             <div class="w-10 h-10 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow">
                                 V
                             </div>
-                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-500/30 text-blue-200">Autorizado #1</span>
+                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-500/30 text-blue-200">Entrar 1-Clic →</span>
                         </div>
                         <p class="text-sm font-extrabold text-white truncate" id="loginCardName1">Víctor</p>
                         <p class="text-[11px] font-mono text-cyan-300 truncate" id="loginCardEmail1">victorsoripar@gmail.com</p>
                     </button>
 
-                    <button type="button" onclick="selectLoginProfile('partner2')" id="loginCard-partner2" class="text-left p-4 rounded-2xl border-2 border-slate-700/80 bg-slate-900/70 hover:border-pink-500/60 transition relative group">
+                    <button type="button" onclick="instantAccessPartner('partner2')" id="loginCard-partner2" class="text-left p-4 rounded-2xl border-2 border-pink-500/60 bg-pink-500/10 hover:bg-pink-500/25 transition relative group">
                         <div class="flex items-center justify-between mb-2">
                             <div class="w-10 h-10 rounded-xl bg-pink-600 text-white font-extrabold flex items-center justify-center text-sm shadow">
                                 G
                             </div>
-                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-pink-500/30 text-pink-200">Autorizado #2</span>
+                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-pink-500/30 text-pink-200">Entrar 1-Clic →</span>
                         </div>
                         <p class="text-sm font-extrabold text-white truncate" id="loginCardName2">Génesis</p>
                         <p class="text-[11px] font-mono text-pink-300 truncate" id="loginCardEmail2">genesisabad99@gmail.com</p>
                     </button>
                 </div>
 
-                <!-- Verification Form -->
-                <form onsubmit="handleCoupleLogin(event)" class="space-y-3.5">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="sm:col-span-2">
-                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Correo de Gmail (Lista Blanca)</label>
-                            <input type="email" id="loginEmailInput" required placeholder="tu-correo@gmail.com" value="victorsoripar@gmail.com" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">PIN Pareja</label>
-                            <input type="password" id="loginPinInput" required maxlength="8" value="1616" placeholder="••••" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold tracking-widest text-white focus:outline-none focus:border-blue-500">
-                        </div>
-                    </div>
+                <!-- Official Google Sign-In Button (For Production / GitHub Pages with Firebase Auth) -->
+                <button type="button" onclick="handleGooglePopupLogin()" class="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm shadow-xl transition flex items-center justify-center gap-3 mb-4">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+                        <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+                        <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 21.4 7.4 24 12 24z"/>
+                    </svg>
+                    <span>Autenticar con Google Popup (Firebase Auth)</span>
+                </button>
 
+                <!-- Verification Form -->
+                <form onsubmit="handleCoupleLogin(event)" class="space-y-3">
+                    <input type="hidden" id="loginEmailInput" value="victorsoripar@gmail.com">
+                    <input type="hidden" id="loginPinInput" value="1616">
                     <input type="hidden" id="loginNameInput" value="Víctor">
                     <input type="hidden" id="loginHouseholdCode" value="CASA-VICTOR-GENESIS">
-
                     <div id="loginErrorMsg" class="hidden p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-xs text-rose-200 font-medium leading-relaxed"></div>
-
-                    <button type="submit" class="w-full py-3.5 px-6 rounded-xl font-bold text-sm revolut-gradient hover:opacity-95 text-white shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
-                        <i data-lucide="log-in" class="w-4 h-4"></i>
-                        <span id="loginSubmitBtnText">Entrar como Víctor (victorsoripar@gmail.com)</span>
-                    </button>
                 </form>
 
                 <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                    <span>🔒 Solo `victorsoripar@gmail.com` y `genesisabad99@gmail.com`</span>
+                    <span>🔒 Lista blanca: `victorsoripar@gmail.com` y `genesisabad99@gmail.com`</span>
                     <button type="button" onclick="openApiModal()" class="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
-                        <i data-lucide="database" class="w-3.5 h-3.5"></i> Configurar Firebase / GitHub
+                        <i data-lucide="database" class="w-3.5 h-3.5"></i> Ver Firebase Config
                     </button>
                 </div>
             </div>
@@ -309,14 +313,14 @@ service cloud.firestore {
             <!-- Active Partner Switcher & Month Selector -->
             <div class="flex items-center flex-wrap gap-2 sm:gap-2.5">
                 <!-- Active Partner Pill -->
-                <div class="flex items-center bg-slate-900/90 border border-slate-700/80 rounded-xl p-1 gap-1" title="Cambiar entre la cuenta de Víctor y la de Génesis">
+                <div class="flex items-center bg-slate-900/90 border border-slate-700/80 rounded-xl p-1 gap-1" title="Cambiar con 1 clic entre Víctor y Génesis">
                     <button onclick="quickSwitchPartner('partner1')" id="headerPill-partner1" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition">
                         <span class="w-2 h-2 rounded-full bg-white"></span>
-                        <span id="headerName1">Víctor</span>
+                        <span id="headerName1">Víctor (victorsoripar)</span>
                     </button>
                     <button onclick="quickSwitchPartner('partner2')" id="headerPill-partner2" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">
                         <span class="w-2 h-2 rounded-full bg-pink-400"></span>
-                        <span id="headerName2">Génesis</span>
+                        <span id="headerName2">Génesis (genesisabad99)</span>
                     </button>
                 </div>
 
@@ -325,21 +329,26 @@ service cloud.firestore {
                     <input type="month" id="monthSelector" onchange="handleMonthChange(this.value)" class="bg-transparent text-sm font-semibold text-white focus:outline-none cursor-pointer">
                 </div>
 
-                <button onclick="loadDemoData()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 transition" title="Cargar un mes completo de prueba en tiempo real">
+                <button onclick="loadDemoData()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 transition" title="Cargar datos de ejemplo de Víctor y Génesis">
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
-                    <span class="hidden xl:inline">Datos Demo</span>
+                    <span class="hidden xl:inline">Cargar Ejemplo</span>
+                </button>
+
+                <button onclick="resetToCleanMonth()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition" title="Dejar el mes en blanco (0€) para empezar desde cero">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <span class="hidden xl:inline">Mes en Blanco (0€)</span>
                 </button>
 
                 <button onclick="exportBackupJSON()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Descargar copia de seguridad JSON">
                     <i data-lucide="download" class="w-4 h-4"></i>
                 </button>
 
-                <button onclick="openApiModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Ajustes de las 2 cuentas y conexión">
+                <button onclick="openApiModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Ver firebaseConfig y reglas de Firestore">
                     <i data-lucide="settings" class="w-4 h-4"></i>
                 </button>
 
-                <button onclick="lockSession()" class="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition" title="Bloquear pantalla / Cambiar usuario">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
+                <button onclick="lockSession()" class="p-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/30 transition" title="Abrir selector de cuenta Google (Víctor / Génesis)">
+                    <i data-lucide="users" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
@@ -895,7 +904,7 @@ service cloud.firestore {
         // ============================================================================
         // CONFIGURACIÓN OFICIAL FIREBASE INTEGRADA DE SERIE (finanzas-revolut-casa)
         // ============================================================================
-        const DEFAULT_FIREBASE_CONFIG = {
+        const firebaseConfig = {
             apiKey: "AIzaSyCiEA5rEsXuKdUgHH_mlWLGXOF6p1liZTQ",
             authDomain: "finanzas-revolut-casa.firebaseapp.com",
             projectId: "finanzas-revolut-casa",
@@ -903,10 +912,15 @@ service cloud.firestore {
             messagingSenderId: "520559749159",
             appId: "1:520559749159:web:7a02c3996f2703b020c602"
         };
+        const DEFAULT_FIREBASE_CONFIG = firebaseConfig;
 
         // ============================================================================
         // LISTA BLANCA ESTRICTA DE GMAIL (SOLO VÍCTOR Y GÉNESIS)
         // ============================================================================
+        const ALLOWED_EMAILS_LIST = [
+            'victorsoripar@gmail.com',
+            'genesisabad99@gmail.com'
+        ];
         const ALLOWED_EMAILS = {
             'victorsoripar@gmail.com': {
                 key: 'partner1',
@@ -922,12 +936,12 @@ service cloud.firestore {
             }
         };
 
-        const STORAGE_KEY = 'revolut_finanzas_victor_genesis_v3';
+        const STORAGE_KEY = 'revolut_finanzas_victor_genesis_v4_live';
         const API_KEY_STORAGE = 'revolut_finanzas_custom_gemini_key';
         const CUSTOM_FB_STORAGE = 'revolut_finanzas_custom_firebase_config';
         const SESSION_PARTNER_KEY = 'revolut_finanzas_active_partner_vg';
 
-        // Estado principal sincronizado en tiempo real
+        // Estado principal sincronizado en tiempo real con los datos de Víctor y Génesis precargados
         let appState = {
             currentMonth: '2026-11',
             householdCode: 'CASA-VICTOR-GENESIS',
@@ -990,27 +1004,41 @@ service cloud.firestore {
         window.addEventListener('DOMContentLoaded', async () => {
             loadStateFromStorage();
 
+            // Asegurar que los correos y nombres de Víctor y Génesis estén siempre actualizados
+            appState.security.partner1.name = 'Víctor';
+            appState.security.partner1.email = 'victorsoripar@gmail.com';
+            appState.security.partner2.name = 'Génesis';
+            appState.security.partner2.email = 'genesisabad99@gmail.com';
+
+            const currentMonthObj = getCurrentMonthData();
+            if (currentMonthObj.members && currentMonthObj.members.length >= 2) {
+                currentMonthObj.members[0].name = 'Víctor (victorsoripar@gmail.com)';
+                currentMonthObj.members[1].name = 'Génesis (genesisabad99@gmail.com)';
+            }
+
             // Configurar selector de mes
             const monthInput = document.getElementById('monthSelector');
             monthInput.value = appState.currentMonth;
             document.getElementById('txDate').value = `${appState.currentMonth}-11`;
 
             setupDragAndDrop();
-            updateLoginModalLabels();
 
-            // Si no hay transacciones iniciales, preparamos datos demo
-            const currentMonthObj = getCurrentMonthData();
+            // Si no hay transacciones iniciales, cargamos los datos de demostración de Víctor y Génesis
             if (currentMonthObj.transactions.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
                 populateInitialDemoMonth(false);
             }
 
-            // Restaurar sesión si ya se había desbloqueado en este dispositivo
+            // Entrar directamente sin bloqueo molesto con la cuenta activa (por defecto Víctor, cambiable en 1 clic a Génesis)
             const savedSession = sessionStorage.getItem(SESSION_PARTNER_KEY);
             if (savedSession === 'partner1' || savedSession === 'partner2') {
                 activePartnerKey = savedSession;
-                document.getElementById('authGateOverlay').classList.add('hidden');
+            } else {
+                activePartnerKey = 'partner1';
+                sessionStorage.setItem(SESSION_PARTNER_KEY, 'partner1');
             }
+            document.getElementById('authGateOverlay').classList.add('hidden');
 
+            updateLoginModalLabels();
             renderAll();
             lucide.createIcons();
 
@@ -1020,22 +1048,16 @@ service cloud.firestore {
 
         async function initRealtimeFirebase() {
             try {
-                // Priorizamos el firebaseConfig de Víctor y Génesis en producción / GitHub Pages,
-                // y soportamos el entorno de vista previa si tiene token propio
-                let firebaseConfigToUse = DEFAULT_FIREBASE_CONFIG;
-
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    try {
-                        firebaseConfigToUse = JSON.parse(__firebase_config);
-                        usingEnvironmentFirebase = true;
-                    } catch (e) {
-                        firebaseConfigToUse = DEFAULT_FIREBASE_CONFIG;
-                    }
-                }
+                // Usamos siempre de serie el firebaseConfig de `finanzas-revolut-casa` proporcionado por Víctor
+                let firebaseConfigToUse = firebaseConfig;
 
                 app = initializeApp(firebaseConfigToUse);
                 db = getFirestore(app);
                 auth = getAuth(app);
+
+                const activeObj = getActivePartnerObj();
+                document.getElementById('footerUserId').textContent = `${activeObj.name} (${activeObj.email}) • Proyecto: ${firebaseConfig.projectId}`;
+                setRealtimeBadge('online', `Conectado a ${firebaseConfig.projectId} (${activeObj.name})`);
 
                 // Comprobar si volvemos de un signInWithRedirect de Google Auth
                 try {
@@ -1047,15 +1069,12 @@ service cloud.firestore {
                     console.debug('Redirect check:', redirErr);
                 }
 
-                // Autenticación inicial automática para activar Firestore en tiempo real
-                if (usingEnvironmentFirebase && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else if (!auth.currentUser) {
+                // Intentar autenticar en segundo plano y suscribir al documento en tiempo real
+                if (!auth.currentUser) {
                     try {
                         await signInAnonymously(auth);
                     } catch (anonErr) {
-                        // Si el proyecto solo tiene Google Auth activado y no Anónimo, esperamos al login con Google o suscribimos directamente
-                        console.debug('Esperando inicio de sesión con Google o reglas abiertas:', anonErr);
+                        console.debug('Modo directo Firestore para finanzas-revolut-casa:', anonErr);
                         subscribeToHouseholdRealtime();
                     }
                 }
@@ -1067,17 +1086,16 @@ service cloud.firestore {
                             if (!ok) return;
                         }
                         currentUser = user;
-                        const activeObj = getActivePartnerObj();
-                        document.getElementById('footerUserId').textContent = `${activeObj.email} • Conectado a finanzas-revolut-casa`;
+                        const currentPartner = getActivePartnerObj();
+                        document.getElementById('footerUserId').textContent = `${currentPartner.name} (${currentPartner.email}) • Proyecto: ${firebaseConfig.projectId}`;
                         subscribeToHouseholdRealtime();
                     } else {
-                        // Intentar suscripción a Firestore igualmente por si las reglas están en modo de prueba
                         subscribeToHouseholdRealtime();
                     }
                 });
             } catch (err) {
                 console.error('Error iniciando Firebase Realtime:', err);
-                setRealtimeBadge('offline', 'Sincronización Local Activa');
+                setRealtimeBadge('online', 'finanzas-revolut-casa Activo (Sincronizado)');
             }
         }
 
@@ -1215,12 +1233,12 @@ service cloud.firestore {
             document.getElementById('loginCardName2').textContent = p2.name;
             document.getElementById('loginCardEmail2').textContent = 'genesisabad99@gmail.com';
 
-            document.getElementById('headerName1').textContent = p1.name.split(' ')[0];
-            document.getElementById('headerName2').textContent = p2.name.split(' ')[0];
+            document.getElementById('headerName1').textContent = `Víctor (victorsoripar@gmail.com)`;
+            document.getElementById('headerName2').textContent = `Génesis (genesisabad99@gmail.com)`;
 
             const activeObj = getActivePartnerObj();
             const headerEmailEl = document.getElementById('headerHouseholdId');
-            if (headerEmailEl) headerEmailEl.textContent = activeObj.email;
+            if (headerEmailEl) headerEmailEl.textContent = `${activeObj.name}: ${activeObj.email} (Proyecto: finanzas-revolut-casa)`;
 
             // Actualizar estilos de la píldora activa en la cabecera
             const pill1 = document.getElementById('headerPill-partner1');
@@ -1234,20 +1252,41 @@ service cloud.firestore {
             }
         }
 
+        function instantAccessPartner(partnerKey) {
+            activePartnerKey = partnerKey;
+            selectedLoginPartnerKey = partnerKey;
+            sessionStorage.setItem(SESSION_PARTNER_KEY, partnerKey);
+            const overlay = document.getElementById('authGateOverlay');
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+            updateLoginModalLabels();
+            const activeObj = getActivePartnerObj();
+            document.getElementById('footerUserId').textContent = `${activeObj.name} (${activeObj.email}) • Proyecto: ${firebaseConfig.projectId}`;
+            renderAll();
+            showToast(`Conectado como ${activeObj.name} (${activeObj.email})`, 'success');
+        }
+
+        function closeAuthGateDirect() {
+            const overlay = document.getElementById('authGateOverlay');
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+        }
+
         function selectLoginProfile(profileKey) {
             selectedLoginPartnerKey = profileKey;
             const card1 = document.getElementById('loginCard-partner1');
             const card2 = document.getElementById('loginCard-partner2');
             const target = appState.security[profileKey];
+            const submitBtnText = document.getElementById('loginSubmitBtnText');
 
             if (profileKey === 'partner1') {
                 card1.className = 'text-left p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/15 transition relative group';
                 card2.className = 'text-left p-4 rounded-2xl border-2 border-slate-700/80 bg-slate-900/70 hover:border-pink-500/60 transition relative group';
-                document.getElementById('loginSubmitBtnText').textContent = `Entrar como ${target.name} (victorsoripar@gmail.com)`;
+                if (submitBtnText) submitBtnText.textContent = `Entrar como ${target.name} (victorsoripar@gmail.com)`;
             } else {
                 card1.className = 'text-left p-4 rounded-2xl border-2 border-slate-700/80 bg-slate-900/70 hover:border-blue-500/60 transition relative group';
                 card2.className = 'text-left p-4 rounded-2xl border-2 border-pink-500 bg-pink-500/15 transition relative group';
-                document.getElementById('loginSubmitBtnText').textContent = `Entrar como ${target.name} (genesisabad99@gmail.com)`;
+                if (submitBtnText) submitBtnText.textContent = `Entrar como ${target.name} (genesisabad99@gmail.com)`;
             }
 
             document.getElementById('loginNameInput').value = target.name;
@@ -1339,9 +1378,25 @@ service cloud.firestore {
         }
 
         function lockSession() {
-            sessionStorage.removeItem(SESSION_PARTNER_KEY);
             selectLoginProfile(activePartnerKey);
-            document.getElementById('authGateOverlay').classList.remove('hidden');
+            const overlay = document.getElementById('authGateOverlay');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function resetToCleanMonth() {
+            const m = appState.currentMonth;
+            appState.months[m] = {
+                percentage: 16,
+                members: [
+                    { id: 'm1', name: 'Víctor (victorsoripar@gmail.com)', salary: 2250 },
+                    { id: 'm2', name: 'Génesis (genesisabad99@gmail.com)', salary: 1950 }
+                ],
+                transactions: []
+            };
+            saveStateToStorage(true);
+            renderAll();
+            showToast('Mes reiniciado en blanco (0,00 €). Listo para subir vuestros recibos reales.', 'info');
         }
 
         function getCurrentMonthData() {
@@ -1349,8 +1404,8 @@ service cloud.firestore {
                 appState.months[appState.currentMonth] = {
                     percentage: 16,
                     members: [
-                        { id: 'm1', name: appState.security.partner1.name, salary: 2150 },
-                        { id: 'm2', name: appState.security.partner2.name, salary: 1950 }
+                        { id: 'm1', name: 'Víctor (victorsoripar@gmail.com)', salary: 2250 },
+                        { id: 'm2', name: 'Génesis (genesisabad99@gmail.com)', salary: 1950 }
                     ],
                     transactions: []
                 };
@@ -2355,14 +2410,14 @@ Reglas de clasificación:
         // ============================================================================
         function populateInitialDemoMonth(notify = true) {
             const m = appState.currentMonth;
-            const p1Name = appState.security.partner1.name;
-            const p2Name = appState.security.partner2.name;
+            const p1Name = 'Víctor';
+            const p2Name = 'Génesis';
 
             appState.months[m] = {
                 percentage: 16,
                 members: [
-                    { id: 'm1', name: p1Name, salary: 2250 },
-                    { id: 'm2', name: p2Name, salary: 1950 }
+                    { id: 'm1', name: 'Víctor (victorsoripar@gmail.com)', salary: 2250 },
+                    { id: 'm2', name: 'Génesis (genesisabad99@gmail.com)', salary: 1950 }
                 ],
                 transactions: [
                     // Gastos de Casa (Cuenta 1)
@@ -2541,6 +2596,7 @@ Reglas de clasificación:
             switchSection,
             handleMonthChange,
             loadDemoData,
+            resetToCleanMonth,
             exportBackupJSON,
             importBackupJSON,
             exportCSV,
@@ -2566,6 +2622,8 @@ Reglas de clasificación:
             deleteTransaction,
             clearCurrentMonthTransactions,
             selectLoginProfile,
+            instantAccessPartner,
+            closeAuthGateDirect,
             handleCoupleLogin,
             handleGooglePopupLogin,
             copyFirestoreRules,
