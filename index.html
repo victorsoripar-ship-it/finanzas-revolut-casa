@@ -1,0 +1,2577 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas de Casa · Revolut Dual Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        revolut: {
+                            bg: '#0B0E14',
+                            card: '#151A24',
+                            border: '#252D3D',
+                            blue: '#0075EB',
+                            cyan: '#00D4FF',
+                            emerald: '#10B981',
+                            purple: '#8B5CF6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0E14;
+            color: #F3F4F6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(21, 26, 36, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .revolut-gradient {
+            background: linear-gradient(135deg, #0075EB 0%, #6366F1 50%, #8B5CF6 100%);
+        }
+        .invest-gradient {
+            background: linear-gradient(135deg, #059669 0%, #10B981 50%, #34D399 100%);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0E14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #252D3D;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3B475E;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, rgba(0, 117, 235, 0.2), rgba(139, 92, 246, 0.2));
+            border-color: #3B82F6;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <!-- ===================================================================== -->
+    <!-- EXCLUSIVE 2-ACCOUNT GMAIL LOGIN GATEWAY (VÍCTOR Y GÉNESIS)            -->
+    <!-- ===================================================================== -->
+    <div id="authGateOverlay" class="fixed inset-0 bg-[#07090E]/95 backdrop-blur-xl z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-slate-700/80 shadow-2xl relative overflow-hidden my-auto">
+            <div class="absolute -top-24 -right-24 w-56 h-56 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-56 h-56 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl revolut-gradient flex items-center justify-center shadow-lg shadow-blue-500/30">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-cyan-400">Acceso Exclusivo Google Auth</span>
+                            <h2 class="text-xl font-extrabold text-white">Finanzas de Víctor & Génesis</h2>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Real-Time
+                    </span>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-300 mb-5 leading-relaxed">
+                    Esta aplicación está blindada exclusivamente para vuestras <strong>2 cuentas de Gmail autorizadas</strong>. Cualquier otro correo será rechazado automáticamente:
+                </p>
+
+                <!-- Official Google Sign-In Button (For Production / GitHub Pages with Firebase Auth) -->
+                <button type="button" onclick="handleGooglePopupLogin()" class="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm shadow-xl transition flex items-center justify-center gap-3 mb-5">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+                        <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+                        <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 21.4 7.4 24 12 24z"/>
+                    </svg>
+                    <span>Continuar con Google (Gmail Autorizado)</span>
+                </button>
+
+                <div class="relative flex py-2 items-center mb-4">
+                    <div class="flex-grow border-t border-slate-800"></div>
+                    <span class="flex-shrink mx-3 text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Selecciona tu cuenta Gmail autorizada</span>
+                    <div class="flex-grow border-t border-slate-800"></div>
+                </div>
+
+                <!-- Two Exclusive Whitelisted Gmail Account Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-5">
+                    <button type="button" onclick="selectLoginProfile('partner1')" id="loginCard-partner1" class="text-left p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/15 transition relative group">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow">
+                                V
+                            </div>
+                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-500/30 text-blue-200">Autorizado #1</span>
+                        </div>
+                        <p class="text-sm font-extrabold text-white truncate" id="loginCardName1">Víctor</p>
+                        <p class="text-[11px] font-mono text-cyan-300 truncate" id="loginCardEmail1">victorsoripar@gmail.com</p>
+                    </button>
+
+                    <button type="button" onclick="selectLoginProfile('partner2')" id="loginCard-partner2" class="text-left p-4 rounded-2xl border-2 border-slate-700/80 bg-slate-900/70 hover:border-pink-500/60 transition relative group">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-pink-600 text-white font-extrabold flex items-center justify-center text-sm shadow">
+                                G
+                            </div>
+                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-pink-500/30 text-pink-200">Autorizado #2</span>
+                        </div>
+                        <p class="text-sm font-extrabold text-white truncate" id="loginCardName2">Génesis</p>
+                        <p class="text-[11px] font-mono text-pink-300 truncate" id="loginCardEmail2">genesisabad99@gmail.com</p>
+                    </button>
+                </div>
+
+                <!-- Verification Form -->
+                <form onsubmit="handleCoupleLogin(event)" class="space-y-3.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Correo de Gmail (Lista Blanca)</label>
+                            <input type="email" id="loginEmailInput" required placeholder="tu-correo@gmail.com" value="victorsoripar@gmail.com" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-mono text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">PIN Pareja</label>
+                            <input type="password" id="loginPinInput" required maxlength="8" value="1616" placeholder="••••" class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold tracking-widest text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="loginNameInput" value="Víctor">
+                    <input type="hidden" id="loginHouseholdCode" value="CASA-VICTOR-GENESIS">
+
+                    <div id="loginErrorMsg" class="hidden p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-xs text-rose-200 font-medium leading-relaxed"></div>
+
+                    <button type="submit" class="w-full py-3.5 px-6 rounded-xl font-bold text-sm revolut-gradient hover:opacity-95 text-white shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
+                        <span id="loginSubmitBtnText">Entrar como Víctor (victorsoripar@gmail.com)</span>
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                    <span>🔒 Solo `victorsoripar@gmail.com` y `genesisabad99@gmail.com`</span>
+                    <button type="button" onclick="openApiModal()" class="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+                        <i data-lucide="database" class="w-3.5 h-3.5"></i> Configurar Firebase / GitHub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cloud, Firestore Rules & API Key Modal for GitHub Pages Portability -->
+    <div id="apiModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card rounded-2xl max-w-2xl w-full p-6 border border-slate-700 shadow-2xl my-auto">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-2 rounded-xl bg-blue-500/20 text-blue-400">
+                        <i data-lucide="cloud-cog" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Configurar Firebase, Reglas Gmail & GitHub Pages</h3>
+                        <p class="text-xs text-slate-400">Exclusivo para victorsoripar@gmail.com y genesisabad99@gmail.com</p>
+                    </div>
+                </div>
+                <button onclick="closeApiModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs max-h-[75vh] overflow-y-auto pr-1">
+                <!-- Whitelisted Accounts Summary -->
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-cyan-400 uppercase tracking-wider">1. Cuentas de Gmail Autorizadas (Lista Blanca Estricta)</h4>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">2 Cuentas Activas</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-slate-400 mb-1">Nombre Cuenta #1</label>
+                            <input type="text" id="cfgPartner1Name" value="Víctor" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Gmail Autorizado #1</label>
+                            <input type="email" id="cfgPartner1Email" value="victorsoripar@gmail.com" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-cyan-400 font-mono cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Nombre Cuenta #2</label>
+                            <input type="text" id="cfgPartner2Name" value="Génesis" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Gmail Autorizado #2</label>
+                            <input type="email" id="cfgPartner2Email" value="genesisabad99@gmail.com" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-pink-400 font-mono cursor-not-allowed">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">PIN de Acceso Rápido de Pareja (4-8 dígitos)</label>
+                        <input type="password" id="cfgHouseholdPin" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-bold tracking-widest">
+                    </div>
+                </div>
+
+                <!-- Firestore Security Rules Ready to Copy -->
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-emerald-400 uppercase tracking-wider">2. Reglas de Seguridad de Firestore (Lista Blanca Gmail)</h4>
+                        <button type="button" onclick="copyFirestoreRules()" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center gap-1 transition">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Reglas
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Pega estas reglas en <strong>Firebase Console → Firestore Database → Reglas (Rules)</strong> para que el servidor de Google solo permita leer y escribir a vuestros dos correos:</p>
+                    <pre id="firestoreRulesCode" class="bg-slate-950 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-emerald-300 overflow-x-auto select-all">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null &&
+        request.auth.token.email in [
+          "victorsoripar@gmail.com",
+          "genesisabad99@gmail.com"
+        ];
+    }
+  }
+}</pre>
+                </div>
+
+                <!-- Firebase Config JSON -->
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-blue-400 uppercase tracking-wider">3. Tu `firebaseConfig` (Ya Integrado de Serie)</h4>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">finanzas-revolut-casa</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Tu configuración del proyecto <strong>finanzas-revolut-casa</strong> ya está integrada directamente en el código lista para GitHub Pages:</p>
+                    <textarea id="customFirebaseConfigInput" rows="4" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-[11px] font-mono text-emerald-300 cursor-not-allowed"></textarea>
+                </div>
+
+                <!-- Gemini API Key -->
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                    <h4 class="font-bold text-purple-400 uppercase tracking-wider">4. Gemini API Key (Opcional para Analizador IA en GitHub Pages)</h4>
+                    <input type="password" id="customApiKeyInput" placeholder="AIzaSy... (En esta vista previa y con el parser inteligente ya funciona sin clave)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 mt-5 pt-3 border-t border-slate-800">
+                <button onclick="closeApiModal()" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Cerrar</button>
+                <button onclick="saveCustomApiKey()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition">Guardar Ajustes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Header / Navigation -->
+    <header class="sticky top-0 z-40 glass-card border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <!-- Brand Title & Live Sync Status -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl revolut-gradient flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i data-lucide="wallet-cards" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <div class="flex items-center flex-wrap gap-2">
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">Revolut Casa & Inversiones</h1>
+                        <span id="realtimeBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                            <span id="realtimeDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="realtimeStatusText">Conectando en vivo...</span>
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 flex items-center gap-2">
+                        <span>Sincronización instantánea: Víctor & Génesis</span>
+                        <span class="text-slate-600">•</span>
+                        <span id="headerHouseholdId" class="font-mono text-[11px] text-cyan-400">victorsoripar@gmail.com</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Active Partner Switcher & Month Selector -->
+            <div class="flex items-center flex-wrap gap-2 sm:gap-2.5">
+                <!-- Active Partner Pill -->
+                <div class="flex items-center bg-slate-900/90 border border-slate-700/80 rounded-xl p-1 gap-1" title="Cambiar entre la cuenta de Víctor y la de Génesis">
+                    <button onclick="quickSwitchPartner('partner1')" id="headerPill-partner1" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition">
+                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                        <span id="headerName1">Víctor</span>
+                    </button>
+                    <button onclick="quickSwitchPartner('partner2')" id="headerPill-partner2" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">
+                        <span class="w-2 h-2 rounded-full bg-pink-400"></span>
+                        <span id="headerName2">Génesis</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-1.5">
+                    <i data-lucide="calendar" class="w-4 h-4 text-blue-400 mr-2"></i>
+                    <input type="month" id="monthSelector" onchange="handleMonthChange(this.value)" class="bg-transparent text-sm font-semibold text-white focus:outline-none cursor-pointer">
+                </div>
+
+                <button onclick="loadDemoData()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 transition" title="Cargar un mes completo de prueba en tiempo real">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span class="hidden xl:inline">Datos Demo</span>
+                </button>
+
+                <button onclick="exportBackupJSON()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Descargar copia de seguridad JSON">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </button>
+
+                <button onclick="openApiModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Ajustes de las 2 cuentas y conexión">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                </button>
+
+                <button onclick="lockSession()" class="p-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 transition" title="Bloquear pantalla / Cambiar usuario">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Navigation Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-1.5 rounded-2xl glass-card">
+            <button onclick="switchSection('dashboard')" id="tab-dashboard" class="tab-btn tab-active flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold border border-transparent transition">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                <span>Resumen del Mes</span>
+            </button>
+            <button onclick="switchSection('calculator')" id="tab-calculator" class="tab-btn flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white border border-transparent transition">
+                <i data-lucide="percent" class="w-4 h-4 text-cyan-400"></i>
+                <span>Calculadora 16% Sueldos</span>
+            </button>
+            <button onclick="switchSection('analyzer')" id="tab-analyzer" class="tab-btn flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white border border-transparent transition">
+                <i data-lucide="scan-line" class="w-4 h-4 text-purple-400"></i>
+                <span>Analizador IA Recibos</span>
+            </button>
+            <button onclick="switchSection('accounts')" id="tab-accounts" class="tab-btn flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white border border-transparent transition">
+                <i data-lucide="arrow-left-right" class="w-4 h-4 text-emerald-400"></i>
+                <span>Movimientos y Cuentas</span>
+            </button>
+        </div>
+
+        <!-- TOP KPI CARDS (Always Visible for Instant Context) -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- KPI 1: Presupuesto 16% -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Presupuesto Casa (16%)</span>
+                    <div class="w-9 h-9 rounded-xl bg-blue-500/15 flex items-center justify-center text-blue-400">
+                        <i data-lucide="piggy-bank" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white" id="kpiBudget">0,00 €</div>
+                <div class="mt-2 flex items-center justify-between text-xs text-slate-400">
+                    <span id="kpiSalariesDetail">Sueldos: 0 €</span>
+                    <button onclick="switchSection('calculator')" class="text-blue-400 hover:underline font-medium">Ajustar →</button>
+                </div>
+            </div>
+
+            <!-- KPI 2: Total Gastado en Casa -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-rose-400">Gastado en Casa</span>
+                    <div class="w-9 h-9 rounded-xl bg-rose-500/15 flex items-center justify-center text-rose-400">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white" id="kpiSpent">0,00 €</div>
+                <div class="mt-2">
+                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="kpiSpentBar" class="bg-gradient-to-r from-blue-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1.5" id="kpiSpentPercent">0% del presupuesto mensual usado</p>
+                </div>
+            </div>
+
+            <!-- KPI 3: Ahorro Neto del Mes -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-cyan-400">Ahorrado este Mes</span>
+                    <div class="w-9 h-9 rounded-xl bg-cyan-500/15 flex items-center justify-center text-cyan-400">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white" id="kpiSaved">0,00 €</div>
+                <p class="text-xs text-slate-400 mt-2" id="kpiSavedStatus">Margen disponible en Cuenta Casa</p>
+            </div>
+
+            <!-- KPI 4: Ganado en Mini-Inversiones Diarias -->
+            <div class="glass-card rounded-2xl p-5 relative overflow-hidden border border-emerald-500/30">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Rendimiento Inversiones</span>
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <i data-lucide="trending-up" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400" id="kpiYield">+0,00 €</div>
+                    <span class="text-xs text-emerald-300/80 font-medium">ganados</span>
+                </div>
+                <div class="mt-2 flex items-center justify-between text-xs text-slate-400">
+                    <span id="kpiInvestedCapital">Capital: 0,00 €</span>
+                    <span id="kpiDailyAvg" class="text-emerald-400 font-medium">+0,00 €/día</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 1: DASHBOARD (RESUMEN DEL MES)     -->
+        <!-- ========================================== -->
+        <div id="section-dashboard" class="space-y-6">
+            <!-- Dual Revolut Accounts Visual Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Card 1: Revolut Cuenta Gastos de Casa -->
+                <div class="rounded-2xl p-6 revolut-gradient shadow-xl relative overflow-hidden flex flex-col justify-between min-h-[210px]">
+                    <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-black/25 text-white backdrop-blur-md">
+                                <i data-lucide="users" class="w-3.5 h-3.5"></i> Cuenta Revolut 1 · Gastos Casa
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-3" id="cardHouseBalance">0,00 €</h3>
+                            <p class="text-xs text-blue-100/80 mt-0.5">Saldo restante del presupuesto mensual (Aportación 16% - Gastos)</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs uppercase tracking-widest text-blue-100 font-bold">REVOLUT JOINT</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/15 text-white">
+                        <div>
+                            <p class="text-[11px] text-blue-100/80">Aportado (16%)</p>
+                            <p class="text-sm sm:text-base font-bold" id="cardHouseContributed">0,00 €</p>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-blue-100/80">Total Gastado</p>
+                            <p class="text-sm sm:text-base font-bold" id="cardHouseSpent">0,00 €</p>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-blue-100/80">Categoría Top</p>
+                            <p class="text-sm sm:text-base font-bold truncate" id="cardHouseTopCat">—</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Revolut Cuenta Inversiones Diarias -->
+                <div class="rounded-2xl p-6 invest-gradient shadow-xl relative overflow-hidden flex flex-col justify-between min-h-[210px]">
+                    <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-black/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-black/25 text-white backdrop-blur-md">
+                                <i data-lucide="Coins" class="w-3.5 h-3.5"></i> Cuenta Revolut 2 · Inversiones Diarias
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-3" id="cardInvestTotal">0,00 €</h3>
+                            <p class="text-xs text-emerald-50/90 mt-0.5">Capital total en Fondo Monetario / Cuenta Remunerada + Intereses</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs uppercase tracking-widest text-emerald-50 font-bold">FLEXIBLE CASH</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/20 text-white">
+                        <div>
+                            <p class="text-[11px] text-emerald-50/80">Capital Aportado</p>
+                            <p class="text-sm sm:text-base font-bold" id="cardInvestPrincipal">0,00 €</p>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-emerald-50/80">Intereses del Mes</p>
+                            <p class="text-sm sm:text-base font-bold" id="cardInvestYield">+0,00 €</p>
+                        </div>
+                        <div>
+                            <p class="text-[11px] text-emerald-50/80">Días Cobrados</p>
+                            <p class="text-sm sm:text-base font-bold" id="cardInvestDays">0 días</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Expense Breakdown Doughnut Chart -->
+                <div class="lg:col-span-5 glass-card rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-bold text-white">¿En qué hemos gastado en casa?</h3>
+                                <p class="text-xs text-slate-400">Desglose por categorías de la cuenta común</p>
+                            </div>
+                            <span class="p-2 rounded-xl bg-slate-800 text-slate-300">
+                                <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                            </span>
+                        </div>
+                        <div class="relative h-64 flex items-center justify-center">
+                            <canvas id="expensesChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="categoryLegendList" class="mt-4 space-y-2 max-h-44 overflow-y-auto pr-1"></div>
+                </div>
+
+                <!-- Daily Investment Yields & Cashflow Chart -->
+                <div class="lg:col-span-7 glass-card rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                            <div>
+                                <h3 class="text-base font-bold text-white">Evolución de Mini-Inversiones y Gastos Diarios</h3>
+                                <p class="text-xs text-slate-400">Rendimientos diarios acumulados vs. ritmo de gasto del mes</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="switchSection('analyzer')" class="text-xs px-3 py-1.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 hover:bg-purple-500/30 font-medium transition">
+                                    + Subir Extracto Revolut
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative h-72">
+                            <canvas id="yieldsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Smart Financial AI Insight Banner -->
+                    <div class="mt-4 p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start gap-3">
+                        <div class="p-2 rounded-lg bg-blue-500/20 text-blue-400 shrink-0 mt-0.5">
+                            <i data-lucide="bot" class="w-4 h-4"></i>
+                        </div>
+                        <div class="text-xs text-slate-300 leading-relaxed" id="smartSummaryText">
+                            Usa la <strong>Calculadora del 16%</strong> antes de empezar el mes para fijar vuestra aportación o pulsa en <strong>Datos Demo</strong> arriba a la derecha para ver un ejemplo completo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: 16% PRE-MONTH SALARY CALCULATOR -->
+        <!-- ========================================== -->
+        <div id="section-calculator" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 sm:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 mb-2">
+                            Paso 1 · Antes de empezar el mes
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-white">Calculadora de Aportación Mensual (Regla del 16%)</h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Introduce el sueldo neto de cada miembro de la casa este mes. Calcularemos automáticamente el <strong>16% exacto</strong> que debe transferir cada uno a la cuenta común de Revolut.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-slate-900 p-3 rounded-2xl border border-slate-800 shrink-0">
+                        <label class="text-xs font-semibold text-slate-300">Porcentaje objetivo:</label>
+                        <div class="flex items-center gap-1">
+                            <input type="number" id="customPercentageInput" value="16" min="1" max="100" step="0.5" oninput="recalculateSalariesLive()" class="w-16 bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1.5 text-center font-bold text-cyan-400 focus:outline-none focus:border-cyan-500">
+                            <span class="text-sm font-bold text-cyan-400">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Members Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+                    <div class="lg:col-span-7 space-y-4">
+                        <div id="salaryMembersContainer" class="space-y-3">
+                            <!-- Rendered via JS -->
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                            <button onclick="addSalaryMember()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+                                <i data-lucide="user-plus" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Añadir otra persona / ingreso extra</span>
+                            </button>
+
+                            <button onclick="saveSalaryCalculation()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-lg shadow-blue-500/20 transition">
+                                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                <span>Guardar Presupuesto del Mes</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Box of 16% Calculation -->
+                    <div class="lg:col-span-5 bg-slate-900/90 rounded-2xl p-6 border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Resumen de Transferencias a Revolut Casa</h3>
+                            <div id="salaryBreakdownList" class="space-y-3 mb-6">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800 space-y-3">
+                            <div class="flex items-center justify-between text-xs text-slate-400">
+                                <span>Suma total de sueldos del hogar:</span>
+                                <span id="calcTotalSalaries" class="font-semibold text-slate-200">0,00 €</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-bold text-white">Total a meter en Revolut Casa:</span>
+                                <span id="calcTotalContribution" class="text-2xl font-extrabold text-cyan-400">0,00 €</span>
+                            </div>
+                            <button onclick="recordContributionsAsTransaction()" class="w-full mt-2 py-2.5 px-4 rounded-xl text-xs font-semibold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 transition flex items-center justify-center gap-2">
+                                <i data-lucide="arrow-down-to-line" class="w-4 h-4"></i>
+                                <span>Fijar como Presupuesto Activo del Mes</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: AI RECEIPT & STATEMENT ANALYZER -->
+        <!-- ========================================== -->
+        <div id="section-analyzer" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 sm:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30 mb-2">
+                            Inteligencia Artificial · Gemini Vision & Text
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-white">Analizador Automático de Recibos y Extractos Revolut</h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Sube una captura de pantalla o recibo de tu cuenta de <strong>Gastos de Casa</strong> o de tu cuenta de <strong>Inversiones Revolut</strong> (o pega el texto/CSV). Yo mismo clasificaré cada gasto, ingreso o rendimiento diario.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+                    <!-- Left: Upload Image / CSV / Paste Text -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <!-- Account Target Preference -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">¿De qué cuenta es el recibo o extracto?</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" onclick="setAnalyzerAccountHint('auto')" id="hint-auto" class="hint-btn py-2 px-3 rounded-xl text-xs font-semibold border border-blue-500 bg-blue-500/20 text-white transition">
+                                    Detectar Automático
+                                </button>
+                                <button type="button" onclick="setAnalyzerAccountHint('house')" id="hint-house" class="hint-btn py-2 px-3 rounded-xl text-xs font-semibold border border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition">
+                                    Cuenta Gastos Casa
+                                </button>
+                                <button type="button" onclick="setAnalyzerAccountHint('investment')" id="hint-investment" class="hint-btn py-2 px-3 rounded-xl text-xs font-semibold border border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition">
+                                    Cuenta Inversiones
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Drag and Drop Zone -->
+                        <label id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center bg-slate-900/50 hover:bg-slate-900/90 min-h-[180px]">
+                            <input type="file" id="receiptFileInput" accept="image/*,.csv,.txt" class="hidden" onchange="handleFileSelected(event)">
+                            <div id="uploadPromptUI" class="space-y-2">
+                                <div class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center mx-auto">
+                                    <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                                </div>
+                                <p class="text-sm font-semibold text-white">Haz clic o arrastra aquí tu recibo de Revolut</p>
+                                <p class="text-xs text-slate-400">Soporta capturas de pantalla (PNG, JPG, WEBP) o archivos CSV/TXT</p>
+                            </div>
+                            <!-- Image Preview Container -->
+                            <div id="imagePreviewContainer" class="hidden w-full">
+                                <img id="receiptImagePreview" src="" alt="Vista previa del recibo" class="max-h-40 mx-auto rounded-xl object-contain border border-slate-700 mb-2">
+                                <p id="selectedFileName" class="text-xs text-emerald-400 font-medium truncate"></p>
+                            </div>
+                        </label>
+
+                        <!-- Raw Text / Paste Box -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">O pega aquí el texto del extracto / movimientos:</label>
+                                <button type="button" onclick="fillSampleReceiptText()" class="text-xs text-purple-400 hover:underline font-medium">Pegar ejemplo de extracto</button>
+                            </div>
+                            <textarea id="rawStatementText" rows="5" placeholder="Ejemplo:
+03/11 Mercadona -64.20€
+04/11 Iberdrola Luz -52.80€
+05/11 Fondo Monetario Flexible Interés diario +0.48€
+06/11 Interés diario Revolut +0.49€..." class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"></textarea>
+                        </div>
+
+                        <button id="analyzeBtn" onclick="analyzeWithGemini()" class="w-full py-3.5 px-6 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white shadow-lg shadow-purple-500/25 transition flex items-center justify-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            <span>Analizar y Categorizar Todo con IA</span>
+                        </button>
+                    </div>
+
+                    <!-- Right: AI Analysis Results & Approval Queue -->
+                    <div class="lg:col-span-6 bg-slate-900/90 rounded-2xl p-6 border border-slate-800 flex flex-col justify-between min-h-[380px]">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Movimientos Detectados por la IA</h3>
+                                <span id="aiDetectedCount" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-semibold">0 detectados</span>
+                            </div>
+
+                            <!-- Loading Spinner State -->
+                            <div id="aiLoadingState" class="hidden py-16 text-center space-y-3">
+                                <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                <p class="text-sm font-semibold text-white">Analizando recibo de Revolut y clasificando categorías...</p>
+                                <p class="text-xs text-slate-400">Calculando gastos de casa y rendimientos de inversión diaria</p>
+                            </div>
+
+                            <!-- AI Summary Message -->
+                            <div id="aiExecutiveSummary" class="hidden mt-3 p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-xs text-purple-200 leading-relaxed"></div>
+
+                            <!-- Parsed Items List -->
+                            <div id="aiParsedList" class="mt-4 space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                                <div class="text-center py-12 text-slate-500 text-xs">
+                                    Sube una imagen o pega tus movimientos a la izquierda y pulsa en <strong>Analizar y Categorizar Todo con IA</strong>.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="aiConfirmFooter" class="hidden pt-4 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
+                            <button onclick="clearAiResults()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                                Descartar
+                            </button>
+                            <button onclick="confirmAndImportAiTransactions()" class="flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center justify-center gap-2">
+                                <i data-lucide="check-check" class="w-4 h-4"></i>
+                                <span>Añadir Todo a Mis Cuentas del Mes</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: MOVIMIENTOS Y CUENTAS           -->
+        <!-- ========================================== -->
+        <div id="section-accounts" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Manual Entry Form -->
+                <div class="lg:col-span-4 glass-card rounded-2xl p-6 h-fit space-y-4">
+                    <div class="flex items-center gap-2.5 pb-3 border-b border-slate-800">
+                        <div class="p-2 rounded-xl bg-emerald-500/15 text-emerald-400">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Añadir Movimiento Manual</h3>
+                            <p class="text-xs text-slate-400">Registra un gasto de casa o rendimiento diario</p>
+                        </div>
+                    </div>
+
+                    <form id="manualTxForm" onsubmit="handleManualTxSubmit(event)" class="space-y-3.5">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Cuenta Revolut</label>
+                            <select id="txAccount" onchange="updateCategoryOptions()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                                <option value="house">🏠 Cuenta 1: Gastos de Casa</option>
+                                <option value="investment">📈 Cuenta 2: Inversiones Diarias</option>
+                            </select>
+                        </div>
+
+                        <div id="txTypeWrapper" class="hidden">
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Tipo en Cuenta de Inversión</label>
+                            <select id="txInvestType" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                <option value="daily_yield">✨ Rendimiento / Interés Diario Ganado (+)</option>
+                                <option value="deposit">💰 Capital Invertido / Aportación al Fondo (+)</option>
+                                <option value="withdrawal">↩️ Retirada de Capital (-)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Concepto / Comercio</label>
+                            <input type="text" id="txConcept" required placeholder="Ej. Mercadona, Luz, Interés Diario..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Importe (€)</label>
+                                <input type="number" id="txAmount" step="0.01" min="0.01" required placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white font-bold focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Fecha</label>
+                                <input type="date" id="txDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div id="txCategoryWrapper">
+                            <label class="block text-xs font-semibold text-slate-400 mb-1">Categoría</label>
+                            <select id="txCategory" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                                <option value="Supermercado">🛒 Supermercado y Comida</option>
+                                <option value="Suministros">💡 Luz, Agua, Gas e Internet</option>
+                                <option value="Vivienda">🏡 Alquiler / Hipoteca / Comunidad</option>
+                                <option value="Restaurantes">🍽️ Restaurantes y Cafés</option>
+                                <option value="Hogar">🧹 Limpieza, Hogar y Mascotas</option>
+                                <option value="Transporte">⛽ Transporte y Gasolina</option>
+                                <option value="Ocio">🎬 Ocio y Suscripciones</option>
+                                <option value="Otros">📦 Otros Gastos</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white transition flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Guardar Movimiento</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Filterable Transactions List -->
+                <div class="lg:col-span-8 glass-card rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+                            <div>
+                                <h3 class="text-base font-bold text-white">Historial Detallado del Mes</h3>
+                                <p class="text-xs text-slate-400">Todos los gastos de la casa y rendimientos diarios de inversión</p>
+                            </div>
+
+                            <div class="flex items-center flex-wrap gap-2">
+                                <select id="filterAccount" onchange="renderTransactionsTable()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none">
+                                    <option value="all">Todas las Cuentas</option>
+                                    <option value="house">🏠 Solo Gastos Casa</option>
+                                    <option value="investment">📈 Solo Inversiones</option>
+                                </select>
+
+                                <select id="filterCategory" onchange="renderTransactionsTable()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none">
+                                    <option value="all">Todas las Categorías</option>
+                                    <option value="Supermercado">Supermercado</option>
+                                    <option value="Suministros">Suministros</option>
+                                    <option value="Vivienda">Vivienda</option>
+                                    <option value="Restaurantes">Restaurantes</option>
+                                    <option value="Hogar">Hogar</option>
+                                    <option value="Transporte">Transporte</option>
+                                    <option value="Ocio">Ocio</option>
+                                    <option value="Rendimiento Diario">Rendimiento Diario</option>
+                                    <option value="Aportación Inversión">Aportación Inversión</option>
+                                </select>
+
+                                <button onclick="exportCSV()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1">
+                                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                                    <span>CSV</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="overflow-x-auto mt-4 max-h-[460px] overflow-y-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                                        <th class="py-2.5 px-3">Fecha</th>
+                                        <th class="py-2.5 px-3">Cuenta</th>
+                                        <th class="py-2.5 px-3">Concepto</th>
+                                        <th class="py-2.5 px-3">Categoría</th>
+                                        <th class="py-2.5 px-3">Subido por</th>
+                                        <th class="py-2.5 px-3 text-right">Importe</th>
+                                        <th class="py-2.5 px-2 text-right">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsTableBody" class="divide-y divide-slate-800/60 text-xs sm:text-sm">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                        <span id="tableCountSummary">Mostrando 0 movimientos</span>
+                        <button onclick="clearCurrentMonthTransactions()" class="text-rose-400 hover:underline font-medium">Vaciar movimientos de este mes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-slate-800/80 text-center sm:flex sm:items-center sm:justify-between text-xs text-slate-500">
+        <p>Proyecto Finanzas de Casa · Exclusivo para Víctor (<span class="text-cyan-400 font-mono">victorsoripar@gmail.com</span>) y Génesis (<span class="text-pink-400 font-mono">genesisabad99@gmail.com</span>)</p>
+        <p class="mt-1 sm:mt-0">Sesión Activa: <span id="footerUserId" class="font-mono text-slate-400">conectando...</span></p>
+    </footer>
+
+    <!-- Firebase Realtime & Application Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ============================================================================
+        // CONFIGURACIÓN OFICIAL FIREBASE INTEGRADA DE SERIE (finanzas-revolut-casa)
+        // ============================================================================
+        const DEFAULT_FIREBASE_CONFIG = {
+            apiKey: "AIzaSyCiEA5rEsXuKdUgHH_mlWLGXOF6p1liZTQ",
+            authDomain: "finanzas-revolut-casa.firebaseapp.com",
+            projectId: "finanzas-revolut-casa",
+            storageBucket: "finanzas-revolut-casa.firebasestorage.app",
+            messagingSenderId: "520559749159",
+            appId: "1:520559749159:web:7a02c3996f2703b020c602"
+        };
+
+        // ============================================================================
+        // LISTA BLANCA ESTRICTA DE GMAIL (SOLO VÍCTOR Y GÉNESIS)
+        // ============================================================================
+        const ALLOWED_EMAILS = {
+            'victorsoripar@gmail.com': {
+                key: 'partner1',
+                name: 'Víctor',
+                email: 'victorsoripar@gmail.com',
+                roleLabel: 'Cuenta #1 · Víctor'
+            },
+            'genesisabad99@gmail.com': {
+                key: 'partner2',
+                name: 'Génesis',
+                email: 'genesisabad99@gmail.com',
+                roleLabel: 'Cuenta #2 · Génesis'
+            }
+        };
+
+        const STORAGE_KEY = 'revolut_finanzas_victor_genesis_v3';
+        const API_KEY_STORAGE = 'revolut_finanzas_custom_gemini_key';
+        const CUSTOM_FB_STORAGE = 'revolut_finanzas_custom_firebase_config';
+        const SESSION_PARTNER_KEY = 'revolut_finanzas_active_partner_vg';
+
+        // Estado principal sincronizado en tiempo real
+        let appState = {
+            currentMonth: '2026-11',
+            householdCode: 'CASA-VICTOR-GENESIS',
+            security: {
+                pin: '1616',
+                partner1: { id: 'partner1', name: 'Víctor', email: 'victorsoripar@gmail.com', roleLabel: 'Cuenta #1' },
+                partner2: { id: 'partner2', name: 'Génesis', email: 'genesisabad99@gmail.com', roleLabel: 'Cuenta #2' }
+            },
+            months: {
+                '2026-11': {
+                    percentage: 16,
+                    members: [
+                        { id: 'm1', name: 'Víctor (victorsoripar@gmail.com)', salary: 2250 },
+                        { id: 'm2', name: 'Génesis (genesisabad99@gmail.com)', salary: 1950 }
+                    ],
+                    transactions: []
+                }
+            }
+        };
+
+        // Usuario activo en este navegador ('partner1' = Víctor, 'partner2' = Génesis)
+        let activePartnerKey = 'partner1';
+        let selectedLoginPartnerKey = 'partner1';
+
+        // Variables de Firebase Realtime
+        let app = null;
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let unsubscribeSnapshot = null;
+        let isApplyingRemoteUpdate = false;
+        let usingEnvironmentFirebase = false;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanzas-revolut-casa';
+
+        // Variables temporales para el Analizador IA
+        let selectedFileBase64 = null;
+        let selectedFileMimeType = null;
+        let analyzerAccountHint = 'auto';
+        let pendingAiTransactions = [];
+
+        // Instancias de Chart.js
+        let expensesChartInstance = null;
+        let yieldsChartInstance = null;
+
+        // Colores por Categoría
+        const CATEGORY_COLORS = {
+            'Supermercado': '#3B82F6',
+            'Suministros': '#F59E0B',
+            'Vivienda': '#8B5CF6',
+            'Restaurantes': '#EC4899',
+            'Hogar': '#06B6D4',
+            'Transporte': '#F97316',
+            'Ocio': '#6366F1',
+            'Otros': '#64748B'
+        };
+
+        // ============================================================================
+        // INICIALIZACIÓN Y CONEXIÓN A FIREBASE REALTIME (`finanzas-revolut-casa`)
+        // ============================================================================
+        window.addEventListener('DOMContentLoaded', async () => {
+            loadStateFromStorage();
+
+            // Configurar selector de mes
+            const monthInput = document.getElementById('monthSelector');
+            monthInput.value = appState.currentMonth;
+            document.getElementById('txDate').value = `${appState.currentMonth}-11`;
+
+            setupDragAndDrop();
+            updateLoginModalLabels();
+
+            // Si no hay transacciones iniciales, preparamos datos demo
+            const currentMonthObj = getCurrentMonthData();
+            if (currentMonthObj.transactions.length === 0 && !localStorage.getItem(STORAGE_KEY)) {
+                populateInitialDemoMonth(false);
+            }
+
+            // Restaurar sesión si ya se había desbloqueado en este dispositivo
+            const savedSession = sessionStorage.getItem(SESSION_PARTNER_KEY);
+            if (savedSession === 'partner1' || savedSession === 'partner2') {
+                activePartnerKey = savedSession;
+                document.getElementById('authGateOverlay').classList.add('hidden');
+            }
+
+            renderAll();
+            lucide.createIcons();
+
+            // Inicializar Firebase para tiempo real con la configuración integrada
+            await initRealtimeFirebase();
+        });
+
+        async function initRealtimeFirebase() {
+            try {
+                // Priorizamos el firebaseConfig de Víctor y Génesis en producción / GitHub Pages,
+                // y soportamos el entorno de vista previa si tiene token propio
+                let firebaseConfigToUse = DEFAULT_FIREBASE_CONFIG;
+
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    try {
+                        firebaseConfigToUse = JSON.parse(__firebase_config);
+                        usingEnvironmentFirebase = true;
+                    } catch (e) {
+                        firebaseConfigToUse = DEFAULT_FIREBASE_CONFIG;
+                    }
+                }
+
+                app = initializeApp(firebaseConfigToUse);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Comprobar si volvemos de un signInWithRedirect de Google Auth
+                try {
+                    const redirectRes = await getRedirectResult(auth);
+                    if (redirectRes && redirectRes.user) {
+                        await validateAndApplyGoogleUser(redirectRes.user);
+                    }
+                } catch (redirErr) {
+                    console.debug('Redirect check:', redirErr);
+                }
+
+                // Autenticación inicial automática para activar Firestore en tiempo real
+                if (usingEnvironmentFirebase && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else if (!auth.currentUser) {
+                    try {
+                        await signInAnonymously(auth);
+                    } catch (anonErr) {
+                        // Si el proyecto solo tiene Google Auth activado y no Anónimo, esperamos al login con Google o suscribimos directamente
+                        console.debug('Esperando inicio de sesión con Google o reglas abiertas:', anonErr);
+                        subscribeToHouseholdRealtime();
+                    }
+                }
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        if (user.email) {
+                            const ok = await validateAndApplyGoogleUser(user);
+                            if (!ok) return;
+                        }
+                        currentUser = user;
+                        const activeObj = getActivePartnerObj();
+                        document.getElementById('footerUserId').textContent = `${activeObj.email} • Conectado a finanzas-revolut-casa`;
+                        subscribeToHouseholdRealtime();
+                    } else {
+                        // Intentar suscripción a Firestore igualmente por si las reglas están en modo de prueba
+                        subscribeToHouseholdRealtime();
+                    }
+                });
+            } catch (err) {
+                console.error('Error iniciando Firebase Realtime:', err);
+                setRealtimeBadge('offline', 'Sincronización Local Activa');
+            }
+        }
+
+        async function validateAndApplyGoogleUser(user) {
+            const normalizedEmail = (user.email || '').trim().toLowerCase();
+            const allowedMatch = ALLOWED_EMAILS[normalizedEmail];
+            if (!allowedMatch) {
+                await signOut(auth);
+                sessionStorage.removeItem(SESSION_PARTNER_KEY);
+                document.getElementById('authGateOverlay').classList.remove('hidden');
+                const errorEl = document.getElementById('loginErrorMsg');
+                errorEl.innerHTML = `🚫 <strong>Acceso denegado:</strong> La cuenta de Google <code>${normalizedEmail}</code> no tiene permiso para entrar. Solo están autorizados <strong>victorsoripar@gmail.com</strong> y <strong>genesisabad99@gmail.com</strong>.`;
+                errorEl.classList.remove('hidden');
+                showToast('Correo de Gmail no autorizado bloqueado', 'error');
+                return false;
+            }
+            activePartnerKey = allowedMatch.key;
+            sessionStorage.setItem(SESSION_PARTNER_KEY, activePartnerKey);
+            document.getElementById('authGateOverlay').classList.add('hidden');
+            updateLoginModalLabels();
+            return true;
+        }
+
+        function getHouseholdDocRef() {
+            // Ruta compatible tanto con el proyecto propio `finanzas-revolut-casa` como con el entorno de vista previa
+            return doc(db, 'artifacts', appId, 'public', 'data', 'revolut_households', 'household_CASA_VICTOR_GENESIS');
+        }
+
+        function subscribeToHouseholdRealtime() {
+            if (!db) return;
+            if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+            const householdDocRef = getHouseholdDocRef();
+            const activeObj = getActivePartnerObj();
+            document.getElementById('headerHouseholdId').textContent = activeObj.email;
+
+            unsubscribeSnapshot = onSnapshot(
+                householdDocRef,
+                async (snapshot) => {
+                    if (snapshot.exists()) {
+                        const remoteData = snapshot.data();
+                        if (remoteData && remoteData.payload) {
+                            try {
+                                const parsed = JSON.parse(remoteData.payload);
+                                isApplyingRemoteUpdate = true;
+                                appState.months = parsed.months || appState.months;
+                                // Mantener siempre los correos de la lista blanca intactos
+                                appState.security.partner1.email = 'victorsoripar@gmail.com';
+                                appState.security.partner2.email = 'genesisabad99@gmail.com';
+                                if (parsed.security?.pin) appState.security.pin = parsed.security.pin;
+                                if (parsed.security?.partner1?.name) appState.security.partner1.name = parsed.security.partner1.name;
+                                if (parsed.security?.partner2?.name) appState.security.partner2.name = parsed.security.partner2.name;
+
+                                saveStateToStorage(false);
+                                updateLoginModalLabels();
+                                renderAll();
+                                isApplyingRemoteUpdate = false;
+
+                                const lastEditor = remoteData.updatedBy || 'Pareja';
+                                setRealtimeBadge('online', `En vivo • Sincronizado (${lastEditor})`);
+                            } catch (parseErr) {
+                                console.error('Error parseando datos remotos:', parseErr);
+                            }
+                        }
+                    } else {
+                        // Primera vez en la base de datos: subimos el estado inicial a la nube
+                        await pushStateToCloud('Inicialización');
+                        setRealtimeBadge('online', 'En vivo • finanzas-revolut-casa Conectado');
+                    }
+                },
+                (error) => {
+                    console.warn('Aviso en onSnapshot:', error);
+                    setRealtimeBadge('offline', 'Pulsa "Continuar con Google" para sincronizar con Firestore');
+                }
+            );
+        }
+
+        async function pushStateToCloud(actionLabel = '') {
+            if (!db || isApplyingRemoteUpdate) return;
+            try {
+                const partnerObj = getActivePartnerObj();
+                const householdDocRef = getHouseholdDocRef();
+                const serializedPayload = JSON.stringify({
+                    security: appState.security,
+                    months: appState.months
+                });
+
+                await setDoc(householdDocRef, {
+                    payload: serializedPayload,
+                    updatedAt: Date.now(),
+                    updatedBy: `${partnerObj.name} (${partnerObj.email})`,
+                    lastAction: actionLabel,
+                    authorUid: currentUser?.uid || partnerObj.email
+                });
+
+                setRealtimeBadge('online', `En vivo • Guardado por ${partnerObj.name}`);
+            } catch (err) {
+                console.warn('No se pudo escribir en Firestore aún:', err);
+            }
+        }
+
+        function setRealtimeBadge(status, text) {
+            const badge = document.getElementById('realtimeBadge');
+            const dot = document.getElementById('realtimeDot');
+            const label = document.getElementById('realtimeStatusText');
+            if (!badge || !dot || !label) return;
+
+            label.textContent = text;
+            if (status === 'online') {
+                badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+            } else {
+                badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30';
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+            }
+        }
+
+        // ============================================================================
+        // SISTEMA DE LOGIN EXCLUSIVO PARA VÍCTOR Y GÉNESIS (GMAIL WHITELIST)
+        // ============================================================================
+        function getActivePartnerObj() {
+            return appState.security?.[activePartnerKey] || {
+                id: 'partner1',
+                name: 'Víctor',
+                email: 'victorsoripar@gmail.com'
+            };
+        }
+
+        function updateLoginModalLabels() {
+            const p1 = appState.security.partner1;
+            const p2 = appState.security.partner2;
+
+            document.getElementById('loginCardName1').textContent = p1.name;
+            document.getElementById('loginCardEmail1').textContent = 'victorsoripar@gmail.com';
+            document.getElementById('loginCardName2').textContent = p2.name;
+            document.getElementById('loginCardEmail2').textContent = 'genesisabad99@gmail.com';
+
+            document.getElementById('headerName1').textContent = p1.name.split(' ')[0];
+            document.getElementById('headerName2').textContent = p2.name.split(' ')[0];
+
+            const activeObj = getActivePartnerObj();
+            const headerEmailEl = document.getElementById('headerHouseholdId');
+            if (headerEmailEl) headerEmailEl.textContent = activeObj.email;
+
+            // Actualizar estilos de la píldora activa en la cabecera
+            const pill1 = document.getElementById('headerPill-partner1');
+            const pill2 = document.getElementById('headerPill-partner2');
+            if (activePartnerKey === 'partner1') {
+                pill1.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white transition shadow';
+                pill2.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+            } else {
+                pill1.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+                pill2.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white transition shadow';
+            }
+        }
+
+        function selectLoginProfile(profileKey) {
+            selectedLoginPartnerKey = profileKey;
+            const card1 = document.getElementById('loginCard-partner1');
+            const card2 = document.getElementById('loginCard-partner2');
+            const target = appState.security[profileKey];
+
+            if (profileKey === 'partner1') {
+                card1.className = 'text-left p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/15 transition relative group';
+                card2.className = 'text-left p-4 rounded-2xl border-2 border-slate-700/80 bg-slate-900/70 hover:border-pink-500/60 transition relative group';
+                document.getElementById('loginSubmitBtnText').textContent = `Entrar como ${target.name} (victorsoripar@gmail.com)`;
+            } else {
+                card1.className = 'text-left p-4 rounded-2xl border-2 border-slate-700/80 bg-slate-900/70 hover:border-blue-500/60 transition relative group';
+                card2.className = 'text-left p-4 rounded-2xl border-2 border-pink-500 bg-pink-500/15 transition relative group';
+                document.getElementById('loginSubmitBtnText').textContent = `Entrar como ${target.name} (genesisabad99@gmail.com)`;
+            }
+
+            document.getElementById('loginNameInput').value = target.name;
+            document.getElementById('loginEmailInput').value = target.email;
+            document.getElementById('loginErrorMsg').classList.add('hidden');
+        }
+
+        // Inicio de sesión con ventana emergente oficial de Google (Firebase Auth)
+        async function handleGooglePopupLogin() {
+            const errorEl = document.getElementById('loginErrorMsg');
+            errorEl.classList.add('hidden');
+
+            try {
+                const provider = new GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                const result = await signInWithPopup(auth, provider);
+                const ok = await validateAndApplyGoogleUser(result.user);
+                if (!ok) return;
+
+                const matched = getActivePartnerObj();
+                renderAll();
+                subscribeToHouseholdRealtime();
+                showToast(`¡Sesión de Google verificada como ${matched.name} (${matched.email})!`, 'success');
+            } catch (err) {
+                console.warn('Aviso en signInWithPopup:', err);
+                // Si el navegador bloquea el popup o estamos en el iframe de vista previa, permitimos entrar directamente con la tarjeta seleccionada
+                const selectedEmail = document.getElementById('loginEmailInput').value.trim().toLowerCase();
+                const matched = ALLOWED_EMAILS[selectedEmail];
+                if (matched) {
+                    activePartnerKey = matched.key;
+                    sessionStorage.setItem(SESSION_PARTNER_KEY, activePartnerKey);
+                    document.getElementById('authGateOverlay').classList.add('hidden');
+                    updateLoginModalLabels();
+                    renderAll();
+                    subscribeToHouseholdRealtime();
+                    showToast(`Sesión iniciada como ${matched.name} (${matched.email})`, 'success');
+                } else {
+                    errorEl.innerHTML = `ℹ️ Pulsa el botón inferior para entrar directamente con tu cuenta autorizada.`;
+                    errorEl.classList.remove('hidden');
+                }
+            }
+        }
+
+        async function handleCoupleLogin(e) {
+            e.preventDefault();
+            const enteredEmail = document.getElementById('loginEmailInput').value.trim().toLowerCase();
+            const enteredPin = document.getElementById('loginPinInput').value.trim();
+            const errorEl = document.getElementById('loginErrorMsg');
+
+            const expectedPin = appState.security.pin || '1616';
+
+            // 1. Verificación estricta de lista blanca de Gmail
+            const matchedAccount = ALLOWED_EMAILS[enteredEmail];
+            if (!matchedAccount) {
+                errorEl.innerHTML = `🚫 <strong>Acceso denegado:</strong> El correo <code>${enteredEmail}</code> no está autorizado. Solo pueden entrar <strong>victorsoripar@gmail.com</strong> (Víctor) y <strong>genesisabad99@gmail.com</strong> (Génesis).`;
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            // 2. Verificación de PIN de pareja
+            if (enteredPin !== expectedPin) {
+                errorEl.textContent = '❌ El PIN privado de pareja no es correcto. (Por defecto: 1616)';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            activePartnerKey = matchedAccount.key;
+            selectedLoginPartnerKey = matchedAccount.key;
+            sessionStorage.setItem(SESSION_PARTNER_KEY, activePartnerKey);
+
+            document.getElementById('authGateOverlay').classList.add('hidden');
+            updateLoginModalLabels();
+            saveStateToStorage(true);
+
+            const activeObj = getActivePartnerObj();
+            document.getElementById('footerUserId').textContent = `${activeObj.email} • finanzas-revolut-casa`;
+
+            renderAll();
+            showToast(`¡Bienvenido/a ${activeObj.name} (${activeObj.email})! Sincronización en tiempo real activa`, 'success');
+        }
+
+        function quickSwitchPartner(partnerKey) {
+            activePartnerKey = partnerKey;
+            sessionStorage.setItem(SESSION_PARTNER_KEY, activePartnerKey);
+            updateLoginModalLabels();
+            const partnerObj = getActivePartnerObj();
+            document.getElementById('footerUserId').textContent = `${partnerObj.email} • finanzas-revolut-casa`;
+            showToast(`Sesión activa cambiada a: ${partnerObj.name} (${partnerObj.email})`, 'info');
+        }
+
+        function lockSession() {
+            sessionStorage.removeItem(SESSION_PARTNER_KEY);
+            selectLoginProfile(activePartnerKey);
+            document.getElementById('authGateOverlay').classList.remove('hidden');
+        }
+
+        function getCurrentMonthData() {
+            if (!appState.months[appState.currentMonth]) {
+                appState.months[appState.currentMonth] = {
+                    percentage: 16,
+                    members: [
+                        { id: 'm1', name: appState.security.partner1.name, salary: 2150 },
+                        { id: 'm2', name: appState.security.partner2.name, salary: 1950 }
+                    ],
+                    transactions: []
+                };
+            }
+            return appState.months[appState.currentMonth];
+        }
+
+        function saveStateToStorage(syncToCloud = true) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+                if (syncToCloud && !isApplyingRemoteUpdate) {
+                    pushStateToCloud('Actualización');
+                }
+            } catch (err) {
+                console.error('Error guardando estado:', err);
+            }
+        }
+
+        function loadStateFromStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && parsed.months) {
+                        appState = {
+                            ...appState,
+                            ...parsed,
+                            security: parsed.security || appState.security
+                        };
+                    }
+                }
+            } catch (err) {
+                console.error('Error leyendo localStorage:', err);
+            }
+        }
+
+        // ============================================================================
+        // NAVEGACIÓN Y CAMBIO DE MES
+        // ============================================================================
+        function switchSection(sectionId) {
+            const sections = ['dashboard', 'calculator', 'analyzer', 'accounts'];
+            sections.forEach(s => {
+                const el = document.getElementById(`section-${s}`);
+                const tab = document.getElementById(`tab-${s}`);
+                if (s === sectionId) {
+                    el.classList.remove('hidden');
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('text-slate-400');
+                } else {
+                    el.classList.add('hidden');
+                    tab.classList.remove('tab-active');
+                    tab.classList.add('text-slate-400');
+                }
+            });
+
+            if (sectionId === 'dashboard') {
+                updateCharts();
+            }
+            lucide.createIcons();
+        }
+
+        function handleMonthChange(newMonth) {
+            if (!newMonth) return;
+            appState.currentMonth = newMonth;
+            document.getElementById('txDate').value = `${newMonth}-01`;
+            saveStateToStorage();
+            renderAll();
+            showToast(`Mes cambiado a ${formatMonthLabel(newMonth)}`, 'info');
+        }
+
+        function formatMonthLabel(yyyyMm) {
+            const [year, month] = yyyyMm.split('-');
+            const names = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            return `${names[parseInt(month, 10) - 1]} ${year}`;
+        }
+
+        function formatCurrency(val) {
+            return new Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 2
+            }).format(val || 0);
+        }
+
+        // ============================================================================
+        // RENDERIZADO PRINCIPAL Y KPIs
+        // ============================================================================
+        function renderAll() {
+            const monthData = getCurrentMonthData();
+            const pct = parseFloat(monthData.percentage) || 16;
+
+            // 1. Cálculos de Sueldos y Presupuesto (16%)
+            const totalSalaries = monthData.members.reduce((acc, m) => acc + (parseFloat(m.salary) || 0), 0);
+            const totalBudget16 = totalSalaries * (pct / 100);
+
+            // 2. Cálculos Cuenta 1: Gastos de Casa
+            const houseExpenses = monthData.transactions.filter(t => t.account === 'house');
+            const totalHouseSpent = houseExpenses.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+            const netSavedHouse = totalBudget16 - totalHouseSpent;
+            const spentPercent = totalBudget16 > 0 ? Math.min(100, Math.round((totalHouseSpent / totalBudget16) * 100)) : 0;
+
+            // Categoría con mayor gasto
+            const catTotals = {};
+            houseExpenses.forEach(t => {
+                catTotals[t.category] = (catTotals[t.category] || 0) + parseFloat(t.amount);
+            });
+            let topCat = '—';
+            let topCatVal = 0;
+            Object.entries(catTotals).forEach(([cat, val]) => {
+                if (val > topCatVal) {
+                    topCatVal = val;
+                    topCat = `${cat} (${formatCurrency(val)})`;
+                }
+            });
+
+            // 3. Cálculos Cuenta 2: Inversiones Diarias Revolut
+            const investTxs = monthData.transactions.filter(t => t.account === 'investment');
+            const yieldTxs = investTxs.filter(t => t.type === 'daily_yield');
+            const depositTxs = investTxs.filter(t => t.type === 'deposit');
+            const withdrawalTxs = investTxs.filter(t => t.type === 'withdrawal');
+
+            const totalYieldEarned = yieldTxs.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+            const totalPrincipal = depositTxs.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0) -
+                                   withdrawalTxs.reduce((acc, t) => acc + (parseFloat(t.amount) || 0), 0);
+            const totalInvestmentBalance = totalPrincipal + totalYieldEarned;
+            const avgDailyYield = yieldTxs.length > 0 ? totalYieldEarned / yieldTxs.length : 0;
+
+            // Actualizar KPIs Superiores
+            document.getElementById('kpiBudget').textContent = formatCurrency(totalBudget16);
+            document.getElementById('kpiSalariesDetail').textContent = `${pct}% de ${formatCurrency(totalSalaries)}`;
+
+            document.getElementById('kpiSpent').textContent = formatCurrency(totalHouseSpent);
+            document.getElementById('kpiSpentBar').style.width = `${spentPercent}%`;
+            document.getElementById('kpiSpentPercent').textContent = `${spentPercent}% del presupuesto mensual usado`;
+
+            const savedEl = document.getElementById('kpiSaved');
+            savedEl.textContent = formatCurrency(netSavedHouse);
+            savedEl.className = `text-2xl sm:text-3xl font-extrabold ${netSavedHouse >= 0 ? 'text-cyan-400' : 'text-rose-400'}`;
+            document.getElementById('kpiSavedStatus').textContent = netSavedHouse >= 0
+                ? 'Ahorro restante de vuestra aportación del 16%'
+                : 'Habéis superado el 16% aportado este mes';
+
+            document.getElementById('kpiYield').textContent = `+${formatCurrency(totalYieldEarned)}`;
+            document.getElementById('kpiInvestedCapital').textContent = `Capital: ${formatCurrency(totalPrincipal)}`;
+            document.getElementById('kpiDailyAvg').textContent = `+${formatCurrency(avgDailyYield)}/día`;
+
+            // Actualizar Tarjetas Revolut
+            document.getElementById('cardHouseBalance').textContent = formatCurrency(netSavedHouse);
+            document.getElementById('cardHouseContributed').textContent = formatCurrency(totalBudget16);
+            document.getElementById('cardHouseSpent').textContent = formatCurrency(totalHouseSpent);
+            document.getElementById('cardHouseTopCat').textContent = topCat;
+
+            document.getElementById('cardInvestTotal').textContent = formatCurrency(totalInvestmentBalance);
+            document.getElementById('cardInvestPrincipal').textContent = formatCurrency(totalPrincipal);
+            document.getElementById('cardInvestYield').textContent = `+${formatCurrency(totalYieldEarned)}`;
+            document.getElementById('cardInvestDays').textContent = `${yieldTxs.length} abonos`;
+
+            // Actualizar Resumen Inteligente
+            const summaryBanner = document.getElementById('smartSummaryText');
+            if (houseExpenses.length === 0 && investTxs.length === 0) {
+                summaryBanner.innerHTML = `Aún no hay movimientos en <strong>${formatMonthLabel(appState.currentMonth)}</strong>. Sube tus capturas o extractos en la pestaña <strong>Analizador IA Recibos</strong> o carga los <strong>Datos Demo</strong>.`;
+            } else {
+                const totalSavedPlusYield = Math.max(0, netSavedHouse) + totalYieldEarned;
+                summaryBanner.innerHTML = `En <strong>${formatMonthLabel(appState.currentMonth)}</strong> habéis aportado <strong>${formatCurrency(totalBudget16)}</strong> (${pct}% de vuestros sueldos). Habéis gastado <strong>${formatCurrency(totalHouseSpent)}</strong> en casa (mayor gasto en <em>${topCat}</em>), ahorrando <strong>${formatCurrency(netSavedHouse)}</strong> del presupuesto y sumando <strong>+${formatCurrency(totalYieldEarned)}</strong> en rendimientos pasivos diarios. Balance positivo total generado: <strong class="text-emerald-400">${formatCurrency(totalSavedPlusYield)}</strong>.`;
+            }
+
+            // Renderizar secciones específicas
+            renderCalculatorSection();
+            renderTransactionsTable();
+            updateCharts();
+        }
+
+        // ============================================================================
+        // SECCIÓN CALCULADORA DEL 16% DE CADA SUELDO
+        // ============================================================================
+        function renderCalculatorSection() {
+            const monthData = getCurrentMonthData();
+            document.getElementById('customPercentageInput').value = monthData.percentage || 16;
+
+            const container = document.getElementById('salaryMembersContainer');
+            container.innerHTML = '';
+
+            monthData.members.forEach((member, idx) => {
+                const pct = parseFloat(monthData.percentage) || 16;
+                const individualContribution = (parseFloat(member.salary) || 0) * (pct / 100);
+
+                const row = document.createElement('div');
+                row.className = 'p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4';
+                row.innerHTML = `
+                    <div class="flex-1 space-y-1">
+                        <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Miembro #${idx + 1}</label>
+                        <input type="text" value="${member.name}" oninput="updateMemberField('${member.id}', 'name', this.value)"
+                            class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3 py-2 text-sm font-semibold text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div class="w-full sm:w-44 space-y-1">
+                        <label class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Sueldo Neto (€)</label>
+                        <input type="number" step="10" min="0" value="${member.salary}" oninput="updateMemberField('${member.id}', 'salary', this.value)"
+                            class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3 py-2 text-sm font-bold text-white focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div class="w-full sm:w-44 bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-2.5 text-right">
+                        <span class="block text-[11px] text-cyan-300">Su ${pct}% a aportar:</span>
+                        <span class="text-base font-extrabold text-cyan-400" id="member-contrib-${member.id}">${formatCurrency(individualContribution)}</span>
+                    </div>
+                    ${monthData.members.length > 1 ? `
+                        <button onclick="removeSalaryMember('${member.id}')" class="text-slate-500 hover:text-rose-400 p-2 rounded-lg transition self-end sm:self-center" title="Eliminar miembro">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    ` : ''}
+                `;
+                container.appendChild(row);
+            });
+
+            updateSalaryBreakdownSummary();
+            lucide.createIcons();
+        }
+
+        function updateMemberField(memberId, field, value) {
+            const monthData = getCurrentMonthData();
+            const member = monthData.members.find(m => m.id === memberId);
+            if (!member) return;
+
+            if (field === 'salary') {
+                member.salary = parseFloat(value) || 0;
+                const pct = parseFloat(monthData.percentage) || 16;
+                const contribEl = document.getElementById(`member-contrib-${memberId}`);
+                if (contribEl) {
+                    contribEl.textContent = formatCurrency(member.salary * (pct / 100));
+                }
+            } else {
+                member.name = value;
+            }
+            updateSalaryBreakdownSummary();
+        }
+
+        function recalculateSalariesLive() {
+            const monthData = getCurrentMonthData();
+            const newPct = parseFloat(document.getElementById('customPercentageInput').value) || 16;
+            monthData.percentage = newPct;
+            renderCalculatorSection();
+        }
+
+        function updateSalaryBreakdownSummary() {
+            const monthData = getCurrentMonthData();
+            const pct = parseFloat(monthData.percentage) || 16;
+            const listEl = document.getElementById('salaryBreakdownList');
+            listEl.innerHTML = '';
+
+            let totalSalaries = 0;
+            let totalContrib = 0;
+
+            monthData.members.forEach(m => {
+                const sal = parseFloat(m.salary) || 0;
+                const c = sal * (pct / 100);
+                totalSalaries += sal;
+                totalContrib += c;
+
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-700/60';
+                item.innerHTML = `
+                    <div>
+                        <p class="text-sm font-bold text-white">${m.name || 'Miembro'}</p>
+                        <p class="text-xs text-slate-400">Sueldo: ${formatCurrency(sal)} × ${pct}%</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-base font-extrabold text-cyan-400">${formatCurrency(c)}</span>
+                        <span class="block text-[10px] text-slate-400">a transferir</span>
+                    </div>
+                `;
+                listEl.appendChild(item);
+            });
+
+            document.getElementById('calcTotalSalaries').textContent = formatCurrency(totalSalaries);
+            document.getElementById('calcTotalContribution').textContent = formatCurrency(totalContrib);
+        }
+
+        function addSalaryMember() {
+            const monthData = getCurrentMonthData();
+            monthData.members.push({
+                id: 'm_' + Date.now(),
+                name: `Persona ${monthData.members.length + 1}`,
+                salary: 1800
+            });
+            saveStateToStorage();
+            renderAll();
+        }
+
+        function removeSalaryMember(id) {
+            const monthData = getCurrentMonthData();
+            monthData.members = monthData.members.filter(m => m.id !== id);
+            saveStateToStorage();
+            renderAll();
+        }
+
+        function saveSalaryCalculation() {
+            saveStateToStorage();
+            renderAll();
+            showToast('Cálculo del 16% guardado como presupuesto del mes', 'success');
+        }
+
+        function recordContributionsAsTransaction() {
+            saveStateToStorage();
+            renderAll();
+            switchSection('dashboard');
+            showToast('Presupuesto mensual del 16% activado en el panel principal', 'success');
+        }
+
+        // ============================================================================
+        // SECCIÓN GRÁFICOS (CHART.JS)
+        // ============================================================================
+        function updateCharts() {
+            const monthData = getCurrentMonthData();
+            const houseExpenses = monthData.transactions.filter(t => t.account === 'house');
+
+            // 1. Gráfico de Rosca: Gastos por Categoría
+            const catTotals = {};
+            houseExpenses.forEach(t => {
+                catTotals[t.category] = (catTotals[t.category] || 0) + parseFloat(t.amount);
+            });
+
+            const categories = Object.keys(catTotals);
+            const amounts = Object.values(catTotals);
+            const bgColors = categories.map(c => CATEGORY_COLORS[c] || '#64748B');
+
+            const ctxExp = document.getElementById('expensesChart').getContext('2d');
+            if (expensesChartInstance) expensesChartInstance.destroy();
+
+            if (categories.length === 0) {
+                expensesChartInstance = new Chart(ctxExp, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Sin gastos registrados'],
+                        datasets: [{ data: [1], backgroundColor: ['#1E293B'], borderWidth: 0 }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '72%',
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                    }
+                });
+            } else {
+                expensesChartInstance = new Chart(ctxExp, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            data: amounts,
+                            backgroundColor: bgColors,
+                            borderColor: '#151A24',
+                            borderWidth: 3,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '68%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => ` ${ctx.label}: ${formatCurrency(ctx.raw)}`
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Renderizar Leyenda Detallada debajo del gráfico
+            const legendContainer = document.getElementById('categoryLegendList');
+            legendContainer.innerHTML = '';
+            const totalSpent = amounts.reduce((a, b) => a + b, 0);
+
+            Object.entries(catTotals)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([cat, val]) => {
+                    const pct = totalSpent > 0 ? Math.round((val / totalSpent) * 100) : 0;
+                    const color = CATEGORY_COLORS[cat] || '#64748B';
+                    const item = document.createElement('div');
+                    item.className = 'flex items-center justify-between text-xs py-1.5 px-2.5 rounded-lg bg-slate-900/60';
+                    item.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full inline-block" style="background-color:${color}"></span>
+                            <span class="font-medium text-slate-200">${cat}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400">${pct}%</span>
+                            <span class="font-bold text-white">${formatCurrency(val)}</span>
+                        </div>
+                    `;
+                    legendContainer.appendChild(item);
+                });
+
+            // 2. Gráfico Combinado: Rendimientos Diarios Acumulados vs Gastos
+            const yieldTxs = monthData.transactions
+                .filter(t => t.account === 'investment' && t.type === 'daily_yield')
+                .sort((a, b) => a.date.localeCompare(b.date));
+
+            // Agrupar fechas del mes
+            const dateMap = {};
+            monthData.transactions.forEach(t => {
+                const day = t.date ? t.date.slice(8, 10) : '01';
+                if (!dateMap[day]) dateMap[day] = { yield: 0, expense: 0 };
+                if (t.account === 'investment' && t.type === 'daily_yield') {
+                    dateMap[day].yield += parseFloat(t.amount) || 0;
+                } else if (t.account === 'house') {
+                    dateMap[day].expense += parseFloat(t.amount) || 0;
+                }
+            });
+
+            const sortedDays = Object.keys(dateMap).sort();
+            let cumulativeYield = 0;
+            const cumulativeYieldData = [];
+            const dailyExpenseData = [];
+
+            sortedDays.forEach(d => {
+                cumulativeYield += dateMap[d].yield;
+                cumulativeYieldData.push(Number(cumulativeYield.toFixed(2)));
+                dailyExpenseData.push(Number(dateMap[d].expense.toFixed(2)));
+            });
+
+            const ctxYield = document.getElementById('yieldsChart').getContext('2d');
+            if (yieldsChartInstance) yieldsChartInstance.destroy();
+
+            yieldsChartInstance = new Chart(ctxYield, {
+                type: 'bar',
+                data: {
+                    labels: sortedDays.length ? sortedDays.map(d => `Día ${d}`) : ['Sin datos'],
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Ganancia Acumulada Mini-Inversiones (€)',
+                            data: sortedDays.length ? cumulativeYieldData : [0],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.35,
+                            yAxisID: 'yYield'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Gastos Casa por Día (€)',
+                            data: sortedDays.length ? dailyExpenseData : [0],
+                            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                            borderRadius: 6,
+                            yAxisID: 'yExpense'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#CBD5E1', font: { size: 11 } }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94A3B8', font: { size: 10 } },
+                            grid: { color: 'rgba(255,255,255,0.04)' }
+                        },
+                        yYield: {
+                            type: 'linear',
+                            position: 'left',
+                            title: { display: true, text: 'Interés Acumulado (€)', color: '#10B981', font: { size: 11 } },
+                            ticks: { color: '#10B981' },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        yExpense: {
+                            type: 'linear',
+                            position: 'right',
+                            title: { display: true, text: 'Gasto Diario (€)', color: '#60A5FA', font: { size: 11 } },
+                            ticks: { color: '#60A5FA' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================================================
+        // SECCIÓN ANALIZADOR IA DE RECIBOS Y EXTRACTOS (GEMINI API)
+        // ============================================================================
+        function setAnalyzerAccountHint(hint) {
+            analyzerAccountHint = hint;
+            ['auto', 'house', 'investment'].forEach(h => {
+                const btn = document.getElementById(`hint-${h}`);
+                if (h === hint) {
+                    btn.className = 'hint-btn py-2 px-3 rounded-xl text-xs font-semibold border border-blue-500 bg-blue-500/20 text-white transition';
+                } else {
+                    btn.className = 'hint-btn py-2 px-3 rounded-xl text-xs font-semibold border border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition';
+                }
+            });
+        }
+
+        function setupDragAndDrop() {
+            const dropZone = document.getElementById('dropZone');
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-purple-500', 'bg-slate-900');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-purple-500', 'bg-slate-900');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-purple-500', 'bg-slate-900');
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    processUploadedFile(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        function handleFileSelected(event) {
+            const file = event.target.files?.[0];
+            if (file) processUploadedFile(file);
+        }
+
+        function processUploadedFile(file) {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const dataUrl = e.target.result;
+                    selectedFileBase64 = dataUrl.split(',')[1];
+                    selectedFileMimeType = file.type;
+
+                    document.getElementById('uploadPromptUI').classList.add('hidden');
+                    const previewContainer = document.getElementById('imagePreviewContainer');
+                    previewContainer.classList.remove('hidden');
+                    document.getElementById('receiptImagePreview').src = dataUrl;
+                    document.getElementById('selectedFileName').textContent = `Imagen lista: ${file.name}`;
+                    showToast('Captura de recibo cargada lista para analizar', 'info');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Archivo CSV o texto
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    selectedFileBase64 = null;
+                    selectedFileMimeType = null;
+                    document.getElementById('rawStatementText').value = e.target.result;
+                    showToast(`Archivo de texto ${file.name} cargado en el cuadro de análisis`, 'info');
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function fillSampleReceiptText() {
+            const m = appState.currentMonth;
+            document.getElementById('rawStatementText').value =
+`Extracto Revolut - Cuentas de Casa e Inversiones (${m}):
+${m}-02 Mercadona Compra Semanal -84.50 EUR
+${m}-03 Iberdrola Clientes Luz -62.30 EUR
+${m}-04 Fondo Monetario Flexible Revolut - Aportación +1200.00 EUR
+${m}-05 Rendimiento Diario Cuenta Flexible Revolut +0.52 EUR
+${m}-06 Rendimiento Diario Cuenta Flexible Revolut +0.53 EUR
+${m}-07 Digi Spain Telecom Fibra y Móvil -35.00 EUR
+${m}-08 Carrefour Hipermercado -49.90 EUR
+${m}-09 Rendimiento Diario Cuenta Flexible Revolut +0.54 EUR
+${m}-10 Cena Pizzería Napoletana -42.00 EUR
+${m}-11 Leroy Merlin Bombillas y Hogar -24.60 EUR
+${m}-11 Rendimiento Diario Cuenta Flexible Revolut +0.55 EUR`;
+            showToast('Texto de ejemplo de extracto Revolut pegado', 'info');
+        }
+
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            let delay = 1000;
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    if (response.status !== 429 && response.status < 500) {
+                        return response;
+                    }
+                } catch (err) {
+                    if (attempt === maxRetries - 1) throw err;
+                }
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+            }
+            throw new Error('No se pudo conectar con Gemini tras varios intentos.');
+        }
+
+        async function analyzeWithGemini() {
+            const rawText = document.getElementById('rawStatementText').value.trim();
+            if (!selectedFileBase64 && !rawText) {
+                showToast('Por favor, sube una captura de recibo o pega el texto de los movimientos primero', 'error');
+                return;
+            }
+
+            const loadingEl = document.getElementById('aiLoadingState');
+            const listEl = document.getElementById('aiParsedList');
+            const summaryEl = document.getElementById('aiExecutiveSummary');
+            const footerEl = document.getElementById('aiConfirmFooter');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+
+            loadingEl.classList.remove('hidden');
+            listEl.innerHTML = '';
+            summaryEl.classList.add('hidden');
+            footerEl.classList.add('hidden');
+            analyzeBtn.disabled = true;
+            analyzeBtn.classList.add('opacity-60');
+
+            const customKey = localStorage.getItem(API_KEY_STORAGE) || "";
+            const apiKey = customKey;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const hintDescription = analyzerAccountHint === 'house'
+                ? 'El usuario indica que este recibo pertenece a la Cuenta 1: Gastos de Casa.'
+                : analyzerAccountHint === 'investment'
+                ? 'El usuario indica que este recibo pertenece a la Cuenta 2: Inversiones Diarias Revolut.'
+                : 'Detecta automáticamente si cada línea pertenece a Gastos de Casa (house) o a Inversiones Revolut (investment).';
+
+            const systemPrompt = `Eres un experto asesor financiero familiar en España especializado en cuentas Revolut.
+Analiza el recibo, captura de pantalla o extracto proporcionado por el usuario y extrae ABSOLUTAMENTE TODOS los movimientos.
+${hintDescription}
+Reglas de clasificación:
+- Si es un gasto doméstico (supermercado, luz, agua, gas, internet, alquiler, restaurantes, compras del hogar, gasolina, ocio, etc.), clasifícalo con account: "house", type: "expense", y asigna una categoría exacta entre: "Supermercado", "Suministros", "Vivienda", "Restaurantes", "Hogar", "Transporte", "Ocio", "Otros".
+- Si es un interés diario, rendimiento diario, dividendo o pago de cuenta remunerada/Fondo Monetario Flexible de Revolut, clasifícalo con account: "investment", type: "daily_yield", category: "Rendimiento Diario".
+- Si es un ingreso o aportación de capital al fondo de inversión, usa account: "investment", type: "deposit", category: "Aportación Inversión".
+- El campo "amount" siempre debe ser un número positivo en euros (ej: 45.20).
+- El campo "date" debe estar en formato YYYY-MM-DD (usa el mes ${appState.currentMonth} si no se especifica el año/mes).
+- Devuelve también un resumen ejecutivo ("summary") cercano y claro en español explicando en qué han gastado y cuánto han ganado en las mini inversiones.`;
+
+            const userParts = [];
+            if (rawText) {
+                userParts.push({ text: `Texto del extracto o recibo:\n${rawText}` });
+            } else {
+                userParts.push({ text: `Extrae y categoriza todos los movimientos de esta imagen de Revolut para el mes ${appState.currentMonth}.` });
+            }
+
+            if (selectedFileBase64 && selectedFileMimeType) {
+                userParts.push({
+                    inlineData: {
+                        mimeType: selectedFileMimeType,
+                        data: selectedFileBase64
+                    }
+                });
+            }
+
+            const payload = {
+                contents: [{ role: 'user', parts: userParts }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            summary: { type: "STRING" },
+                            transactions: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        date: { type: "STRING" },
+                                        concept: { type: "STRING" },
+                                        amount: { type: "NUMBER" },
+                                        account: { type: "STRING", enum: ["house", "investment"] },
+                                        type: { type: "STRING", enum: ["expense", "daily_yield", "deposit", "withdrawal"] },
+                                        category: { type: "STRING" }
+                                    },
+                                    required: ["date", "concept", "amount", "account", "type", "category"]
+                                }
+                            }
+                        },
+                        required: ["summary", "transactions"]
+                    }
+                }
+            };
+
+            try {
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const textJson = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!textJson) {
+                    throw new Error('Respuesta inesperada de la IA.');
+                }
+
+                const parsed = JSON.parse(textJson);
+                pendingAiTransactions = parsed.transactions || [];
+
+                renderAiDetectedResults(parsed.summary, pendingAiTransactions);
+                showToast(`¡IA completada! ${pendingAiTransactions.length} movimientos categorizados`, 'success');
+            } catch (error) {
+                console.error('Error en el análisis con Gemini:', error);
+                // Respaldo inteligente local si el usuario está en GitHub Pages sin API key configurada y pegó texto
+                if (rawText) {
+                    const fallback = fallbackLocalParser(rawText);
+                    pendingAiTransactions = fallback.transactions;
+                    renderAiDetectedResults(fallback.summary, pendingAiTransactions);
+                    showToast('Movimientos procesados con analizador rápido. (Configura tu API Key arriba si estás en GitHub Pages)', 'info');
+                } else {
+                    listEl.innerHTML = `<div class="p-4 rounded-xl bg-rose-500/15 border border-rose-500/30 text-xs text-rose-300">
+                        No se pudo conectar con Gemini IA. Si ya has subido la web a GitHub Pages, pulsa el icono de engranaje arriba a la derecha para introducir tu Gemini API Key gratuita.
+                    </div>`;
+                }
+            } finally {
+                loadingEl.classList.add('hidden');
+                analyzeBtn.disabled = false;
+                analyzeBtn.classList.remove('opacity-60');
+            }
+        }
+
+        // Analizador de respaldo por si usan texto en GitHub Pages sin llave configurada
+        function fallbackLocalParser(text) {
+            const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+            const txs = [];
+            lines.forEach(line => {
+                const amountMatch = line.match(/([+-]?\d+[.,]\d{2})/);
+                if (!amountMatch) return;
+                const rawVal = parseFloat(amountMatch[1].replace(',', '.'));
+                const absAmount = Math.abs(rawVal);
+                const dateMatch = line.match(/(\d{4}-\d{2}-\d{2})|(\d{2}\/\d{2})/);
+                let date = `${appState.currentMonth}-10`;
+                if (dateMatch && dateMatch[1]) date = dateMatch[1];
+
+                const lower = line.toLowerCase();
+                let account = 'house';
+                let type = 'expense';
+                let category = 'Otros';
+
+                if (lower.includes('rendimiento') || lower.includes('interés') || lower.includes('interes') || lower.includes('daily')) {
+                    account = 'investment';
+                    type = 'daily_yield';
+                    category = 'Rendimiento Diario';
+                } else if (lower.includes('aportación') || lower.includes('fondo monetario')) {
+                    account = 'investment';
+                    type = 'deposit';
+                    category = 'Aportación Inversión';
+                } else if (lower.includes('mercadona') || lower.includes('carrefour') || lower.includes('lidl') || lower.includes('aldi')) {
+                    category = 'Supermercado';
+                } else if (lower.includes('iberdrola') || lower.includes('luz') || lower.includes('agua') || lower.includes('digi') || lower.includes('fibra')) {
+                    category = 'Suministros';
+                } else if (lower.includes('cena') || lower.includes('pizzer') || lower.includes('restaurante') || lower.includes('bar')) {
+                    category = 'Restaurantes';
+                } else if (lower.includes('leroy') || lower.includes('ikea') || lower.includes('hogar')) {
+                    category = 'Hogar';
+                }
+
+                const cleanConcept = line
+                    .replace(/(\d{4}-\d{2}-\d{2})|(\d{2}\/\d{2})/g, '')
+                    .replace(/([+-]?\d+[.,]\d{2})\s*(EUR|€)?/gi, '')
+                    .trim() || 'Movimiento Revolut';
+
+                txs.push({
+                    date,
+                    concept: cleanConcept,
+                    amount: absAmount,
+                    account,
+                    type,
+                    category
+                });
+            });
+
+            return {
+                summary: `Se han detectado y categorizado ${txs.length} movimientos automáticamente.`,
+                transactions: txs
+            };
+        }
+
+        function renderAiDetectedResults(summaryText, transactions) {
+            const summaryEl = document.getElementById('aiExecutiveSummary');
+            const listEl = document.getElementById('aiParsedList');
+            const footerEl = document.getElementById('aiConfirmFooter');
+            const countEl = document.getElementById('aiDetectedCount');
+
+            countEl.textContent = `${transactions.length} detectados`;
+
+            if (summaryText) {
+                summaryEl.textContent = summaryText;
+                summaryEl.classList.remove('hidden');
+            }
+
+            listEl.innerHTML = '';
+            transactions.forEach((tx, index) => {
+                const isInvest = tx.account === 'investment';
+                const badgeColor = isInvest
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                    : 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+
+                const item = document.createElement('div');
+                item.className = 'p-3 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-between gap-3';
+                item.innerHTML = `
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${badgeColor}">
+                                ${isInvest ? '📈 Inversión' : '🏠 Casa'}
+                            </span>
+                            <span class="text-xs font-semibold text-purple-300">${tx.category}</span>
+                            <span class="text-[11px] text-slate-400">${tx.date}</span>
+                        </div>
+                        <p class="text-xs sm:text-sm font-bold text-white truncate mt-1">${tx.concept}</p>
+                    </div>
+                    <div class="text-right shrink-0 flex items-center gap-2">
+                        <span class="text-sm font-extrabold ${isInvest ? 'text-emerald-400' : 'text-rose-400'}">
+                            ${isInvest ? '+' : '-'}${formatCurrency(tx.amount)}
+                        </span>
+                        <button onclick="removePendingAiTx(${index})" class="text-slate-500 hover:text-rose-400 p-1">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                listEl.appendChild(item);
+            });
+
+            if (transactions.length > 0) {
+                footerEl.classList.remove('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function removePendingAiTx(idx) {
+            pendingAiTransactions.splice(idx, 1);
+            renderAiDetectedResults(document.getElementById('aiExecutiveSummary').textContent, pendingAiTransactions);
+        }
+
+        function clearAiResults() {
+            pendingAiTransactions = [];
+            document.getElementById('aiParsedList').innerHTML = `<div class="text-center py-12 text-slate-500 text-xs">Resultados descartados. Puedes realizar un nuevo análisis cuando quieras.</div>`;
+            document.getElementById('aiExecutiveSummary').classList.add('hidden');
+            document.getElementById('aiConfirmFooter').classList.add('hidden');
+            document.getElementById('aiDetectedCount').textContent = '0 detectados';
+        }
+
+        function confirmAndImportAiTransactions() {
+            if (!pendingAiTransactions.length) return;
+            const monthData = getCurrentMonthData();
+            const partnerObj = getActivePartnerObj();
+
+            pendingAiTransactions.forEach(tx => {
+                monthData.transactions.push({
+                    id: 'tx_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                    date: tx.date || `${appState.currentMonth}-11`,
+                    concept: tx.concept,
+                    amount: parseFloat(tx.amount) || 0,
+                    account: tx.account,
+                    type: tx.type,
+                    category: tx.category,
+                    addedBy: partnerObj.name,
+                    partnerKey: activePartnerKey
+                });
+            });
+
+            saveStateToStorage(true);
+            clearAiResults();
+            renderAll();
+            switchSection('dashboard');
+            showToast(`¡Movimientos subidos en tiempo real por ${partnerObj.name}!`, 'success');
+        }
+
+        // ============================================================================
+        // SECCIÓN MOVIMIENTOS Y FORMULARIO MANUAL
+        // ============================================================================
+        function updateCategoryOptions() {
+            const acc = document.getElementById('txAccount').value;
+            const catWrapper = document.getElementById('txCategoryWrapper');
+            const typeWrapper = document.getElementById('txTypeWrapper');
+
+            if (acc === 'investment') {
+                catWrapper.classList.add('hidden');
+                typeWrapper.classList.remove('hidden');
+            } else {
+                catWrapper.classList.remove('hidden');
+                typeWrapper.classList.add('hidden');
+            }
+        }
+
+        function handleManualTxSubmit(e) {
+            e.preventDefault();
+            const acc = document.getElementById('txAccount').value;
+            const concept = document.getElementById('txConcept').value.trim();
+            const amount = parseFloat(document.getElementById('txAmount').value);
+            const date = document.getElementById('txDate').value;
+
+            if (!concept || isNaN(amount) || amount <= 0) return;
+
+            let type = 'expense';
+            let category = document.getElementById('txCategory').value;
+
+            if (acc === 'investment') {
+                type = document.getElementById('txInvestType').value;
+                if (type === 'daily_yield') category = 'Rendimiento Diario';
+                else if (type === 'deposit') category = 'Aportación Inversión';
+                else category = 'Retirada Inversión';
+            }
+
+            const partnerObj = getActivePartnerObj();
+            const monthData = getCurrentMonthData();
+            monthData.transactions.push({
+                id: 'tx_' + Date.now(),
+                date,
+                concept,
+                amount,
+                account: acc,
+                type,
+                category,
+                addedBy: partnerObj.name,
+                partnerKey: activePartnerKey
+            });
+
+            saveStateToStorage(true);
+            document.getElementById('txConcept').value = '';
+            document.getElementById('txAmount').value = '';
+            renderAll();
+            showToast(`Movimiento sincronizado en vivo por ${partnerObj.name}`, 'success');
+        }
+
+        function renderTransactionsTable() {
+            const monthData = getCurrentMonthData();
+            const accFilter = document.getElementById('filterAccount').value;
+            const catFilter = document.getElementById('filterCategory').value;
+            const tbody = document.getElementById('transactionsTableBody');
+
+            const filtered = monthData.transactions
+                .filter(t => accFilter === 'all' || t.account === accFilter)
+                .filter(t => catFilter === 'all' || t.category === catFilter)
+                .sort((a, b) => b.date.localeCompare(a.date));
+
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-10 text-center text-slate-500 text-xs">
+                            No hay movimientos registrados con estos filtros en este mes.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                filtered.forEach(tx => {
+                    const isInvest = tx.account === 'investment';
+                    const isYield = tx.type === 'daily_yield';
+                    const isPartner2 = tx.partnerKey === 'partner2';
+                    const authorName = tx.addedBy || (isPartner2 ? appState.security.partner2.name : appState.security.partner1.name);
+                    const authorEmail = isPartner2 ? 'genesisabad99@gmail.com' : 'victorsoripar@gmail.com';
+
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-slate-800/40 transition';
+                    row.innerHTML = `
+                        <td class="py-3 px-3 text-slate-400 whitespace-nowrap">${tx.date}</td>
+                        <td class="py-3 px-3">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${isInvest ? 'bg-emerald-500/15 text-emerald-400' : 'bg-blue-500/15 text-blue-400'}">
+                                ${isInvest ? '📈 Inversiones' : '🏠 Casa'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 font-semibold text-white">${tx.concept}</td>
+                        <td class="py-3 px-3">
+                            <span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300">${tx.category}</span>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span title="${authorEmail}" class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full ${isPartner2 ? 'bg-pink-500/15 text-pink-300 border border-pink-500/30' : 'bg-blue-500/15 text-blue-300 border border-blue-500/30'}">
+                                <span class="w-1.5 h-1.5 rounded-full ${isPartner2 ? 'bg-pink-400' : 'bg-blue-400'}"></span>
+                                ${authorName}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-right font-bold whitespace-nowrap ${isInvest ? (tx.type === 'withdrawal' ? 'text-amber-400' : 'text-emerald-400') : 'text-rose-400'}">
+                            ${isInvest && tx.type !== 'withdrawal' ? '+' : '-'}${formatCurrency(tx.amount)}
+                            ${isYield ? '<span class="block text-[10px] text-emerald-300/70 font-normal">Interés diario</span>' : ''}
+                        </td>
+                        <td class="py-3 px-2 text-right">
+                            <button onclick="deleteTransaction('${tx.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg transition" title="Eliminar">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            document.getElementById('tableCountSummary').textContent = `Mostrando ${filtered.length} de ${monthData.transactions.length} movimientos`;
+            lucide.createIcons();
+        }
+
+        function deleteTransaction(id) {
+            const monthData = getCurrentMonthData();
+            monthData.transactions = monthData.transactions.filter(t => t.id !== id);
+            saveStateToStorage();
+            renderAll();
+            showToast('Movimiento eliminado', 'info');
+        }
+
+        function clearCurrentMonthTransactions() {
+            const monthData = getCurrentMonthData();
+            monthData.transactions = [];
+            saveStateToStorage();
+            renderAll();
+            showToast('Movimientos del mes vaciados', 'info');
+        }
+
+        // ============================================================================
+        // DATOS DEMO Y EXPORTACIÓN / IMPORTACIÓN PARA GITHUB
+        // ============================================================================
+        function populateInitialDemoMonth(notify = true) {
+            const m = appState.currentMonth;
+            const p1Name = appState.security.partner1.name;
+            const p2Name = appState.security.partner2.name;
+
+            appState.months[m] = {
+                percentage: 16,
+                members: [
+                    { id: 'm1', name: p1Name, salary: 2250 },
+                    { id: 'm2', name: p2Name, salary: 1950 }
+                ],
+                transactions: [
+                    // Gastos de Casa (Cuenta 1)
+                    { id: 'd1', date: `${m}-02`, concept: 'Mercadona Compra Grande', amount: 112.40, account: 'house', type: 'expense', category: 'Supermercado', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'd2', date: `${m}-03`, concept: 'Iberdrola Factura Luz', amount: 64.80, account: 'house', type: 'expense', category: 'Suministros', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'd3', date: `${m}-04`, concept: 'Fibra Digi + 2 Líneas', amount: 35.00, account: 'house', type: 'expense', category: 'Suministros', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'd4', date: `${m}-06`, concept: 'Lidl Compra Semanal', amount: 58.20, account: 'house', type: 'expense', category: 'Supermercado', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'd5', date: `${m}-07`, concept: 'Gasolinera Repsol Compartida', amount: 45.00, account: 'house', type: 'expense', category: 'Transporte', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'd6', date: `${m}-08`, concept: 'Cena Viernes Pizzería', amount: 39.50, account: 'house', type: 'expense', category: 'Restaurantes', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'd7', date: `${m}-09`, concept: 'Canal de Isabel II Agua', amount: 28.90, account: 'house', type: 'expense', category: 'Suministros', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'd8', date: `${m}-10`, concept: 'Amazon Productos Limpieza Hogar', amount: 31.40, account: 'house', type: 'expense', category: 'Hogar', addedBy: p2Name, partnerKey: 'partner2' },
+
+                    // Cuenta Inversiones Revolut (Cuenta 2: Fondo Monetario Flexible)
+                    { id: 'i1', date: `${m}-01`, concept: 'Capital en Fondo Monetario Revolut', amount: 5500.00, account: 'investment', type: 'deposit', category: 'Aportación Inversión', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'i2', date: `${m}-02`, concept: 'Interés Diario Revolut Flexible', amount: 0.49, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'i3', date: `${m}-03`, concept: 'Interés Diario Revolut Flexible', amount: 0.49, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'i4', date: `${m}-04`, concept: 'Interés Diario Revolut Flexible', amount: 0.50, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'i5', date: `${m}-05`, concept: 'Interés Diario Revolut Flexible', amount: 0.50, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'i6', date: `${m}-06`, concept: 'Aportación Extra Ahorro Casa', amount: 500.00, account: 'investment', type: 'deposit', category: 'Aportación Inversión', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'i7', date: `${m}-07`, concept: 'Interés Diario Revolut Flexible', amount: 0.55, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'i8', date: `${m}-08`, concept: 'Interés Diario Revolut Flexible', amount: 0.55, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'i9', date: `${m}-09`, concept: 'Interés Diario Revolut Flexible', amount: 0.56, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p1Name, partnerKey: 'partner1' },
+                    { id: 'i10', date: `${m}-10`, concept: 'Interés Diario Revolut Flexible', amount: 0.56, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p2Name, partnerKey: 'partner2' },
+                    { id: 'i11', date: `${m}-11`, concept: 'Interés Diario Revolut Flexible', amount: 0.57, account: 'investment', type: 'daily_yield', category: 'Rendimiento Diario', addedBy: p1Name, partnerKey: 'partner1' }
+                ]
+            };
+            saveStateToStorage(notify);
+            renderAll();
+            if (notify) {
+                showToast('Datos demo sincronizados en tiempo real para las 2 cuentas', 'success');
+            }
+        }
+
+        function loadDemoData() {
+            populateInitialDemoMonth(true);
+        }
+
+        function exportBackupJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", `finanzas_casa_revolut_${appState.currentMonth}.json`);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showToast('Copia de seguridad JSON descargada', 'success');
+        }
+
+        function importBackupJSON(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && imported.months) {
+                        appState = imported;
+                        document.getElementById('monthSelector').value = appState.currentMonth;
+                        saveStateToStorage();
+                        renderAll();
+                        showToast('Copia de seguridad restaurada con éxito', 'success');
+                    } else {
+                        showToast('El archivo JSON no tiene el formato esperado', 'error');
+                    }
+                } catch (err) {
+                    showToast('Error al leer el archivo JSON', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportCSV() {
+            const monthData = getCurrentMonthData();
+            if (!monthData.transactions.length) {
+                showToast('No hay movimientos para exportar a CSV', 'error');
+                return;
+            }
+            const headers = ['Fecha', 'Cuenta', 'Tipo', 'Categoria', 'Concepto', 'Importe_EUR'];
+            const rows = monthData.transactions.map(t => [
+                t.date,
+                t.account === 'house' ? 'Gastos Casa' : 'Inversiones',
+                t.type,
+                `"${t.category}"`,
+                `"${t.concept.replace(/"/g, '""')}"`,
+                t.amount.toFixed(2)
+            ]);
+            const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const a = document.createElement('a');
+            a.setAttribute("href", encodeURI(csvContent));
+            a.setAttribute("download", `extracto_revolut_${appState.currentMonth}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showToast('Archivo CSV descargado', 'success');
+        }
+
+        // ============================================================================
+        // MODAL DE API KEY Y NOTIFICACIONES TOAST
+        // ============================================================================
+        // MODAL DE API KEY, SEGURIDAD DE 2 CUENTAS Y NOTIFICACIONES TOAST
+        // ============================================================================
+        function openApiModal() {
+            const modal = document.getElementById('apiModal');
+            document.getElementById('customApiKeyInput').value = localStorage.getItem(API_KEY_STORAGE) || '';
+            document.getElementById('customFirebaseConfigInput').value = JSON.stringify(DEFAULT_FIREBASE_CONFIG, null, 2);
+
+            document.getElementById('cfgPartner1Name').value = appState.security.partner1.name;
+            document.getElementById('cfgPartner1Email').value = 'victorsoripar@gmail.com';
+            document.getElementById('cfgPartner2Name').value = appState.security.partner2.name;
+            document.getElementById('cfgPartner2Email').value = 'genesisabad99@gmail.com';
+            document.getElementById('cfgHouseholdPin').value = appState.security.pin || '1616';
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeApiModal() {
+            const modal = document.getElementById('apiModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveCustomApiKey() {
+            const val = document.getElementById('customApiKeyInput').value.trim();
+            if (val) {
+                localStorage.setItem(API_KEY_STORAGE, val);
+            } else {
+                localStorage.removeItem(API_KEY_STORAGE);
+            }
+
+            // Mantener los correos autorizados fijos en la lista blanca y guardar nombres/PIN
+            appState.security.partner1.name = document.getElementById('cfgPartner1Name').value.trim() || 'Víctor';
+            appState.security.partner1.email = 'victorsoripar@gmail.com';
+            appState.security.partner2.name = document.getElementById('cfgPartner2Name').value.trim() || 'Génesis';
+            appState.security.partner2.email = 'genesisabad99@gmail.com';
+            appState.security.pin = document.getElementById('cfgHouseholdPin').value.trim() || '1616';
+
+            updateLoginModalLabels();
+            saveStateToStorage(true);
+            closeApiModal();
+            showToast('Configuración guardada para Víctor y Génesis', 'success');
+        }
+
+        function copyFirestoreRules() {
+            const rulesText = document.getElementById('firestoreRulesCode').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = rulesText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            showToast('Reglas de Firestore copiadas al portapapeles', 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'border-emerald-500/50 bg-slate-900/95 text-emerald-300',
+                error: 'border-rose-500/50 bg-slate-900/95 text-rose-300',
+                info: 'border-blue-500/50 bg-slate-900/95 text-blue-300'
+            };
+            toast.className = `pointer-events-auto p-3.5 rounded-xl border shadow-xl text-xs font-semibold flex items-center justify-between gap-3 transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white">✕</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentElement) toast.remove();
+            }, 4000);
+        }
+
+        // Exponer funciones al ámbito global para los atributos onclick del HTML
+        Object.assign(window, {
+            switchSection,
+            handleMonthChange,
+            loadDemoData,
+            exportBackupJSON,
+            importBackupJSON,
+            exportCSV,
+            openApiModal,
+            closeApiModal,
+            saveCustomApiKey,
+            updateMemberField,
+            recalculateSalariesLive,
+            addSalaryMember,
+            removeSalaryMember,
+            saveSalaryCalculation,
+            recordContributionsAsTransaction,
+            setAnalyzerAccountHint,
+            handleFileSelected,
+            fillSampleReceiptText,
+            analyzeWithGemini,
+            removePendingAiTx,
+            clearAiResults,
+            confirmAndImportAiTransactions,
+            updateCategoryOptions,
+            handleManualTxSubmit,
+            renderTransactionsTable,
+            deleteTransaction,
+            clearCurrentMonthTransactions,
+            selectLoginProfile,
+            handleCoupleLogin,
+            handleGooglePopupLogin,
+            copyFirestoreRules,
+            quickSwitchPartner,
+            lockSession
+        });
+    </script>
+</body>
+</html>
